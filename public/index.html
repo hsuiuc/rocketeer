@@ -11,7 +11,7 @@
 <meta name="description" content="">
 <link rel="shortcut icon" type="image/png" href="images/favicon.ico"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rocketer</title>
+<title>Rocketeer</title>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/flexslider.css">
 <link rel="stylesheet" href="css/jquery.fancybox.css">
@@ -26,12 +26,12 @@
 <!-- header section -->
 <section class="banner" role="banner">
   <header id="header">
-    <div class="header-content clearfix"> <a class="logo" href="index.html">Rocketer</a>
+    <div class="header-content clearfix"> <a class="logo" href="index.html">Rocketeer</a>
       <nav class="navigation" role="navigation">
         <ul class="primary-nav">
           <li><a href="#intro">About</a></li>
           <li><a href="#services">Services</a></li>
-          <li><a href="#works">Steps</a></li>
+          <li><a href="#step-one">Try</a></li>
           <li><a href="#teams">Our Team</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -90,165 +90,90 @@
 <section id="step-one" class="section step-one">
   <div class="container">
     <div class="col-md-8 col-md-offset-2 text-center">
-      <h3>Step One</h3>
-      <p>basic funtionalities</p>
+      <h3>Open Your Bussiness!</h3>
+      <p>Follow the steps to find your personalized recommendation</p>
     </div>
-  </div>
-</section>
-<section id="step-two" class="section step-two">
-  <div class="container">
-    <div class="col-md-8 col-md-offset-2 text-center">
-      <h3>Step Two</h3>
-      <p>Discover your neighborhood</p>
+    <div id="floating-panel" style="float: right;">
+      <p>Bussiness Name</p>
+      <input id="bussiness-name" type="text">
+      <input id="submit" type="button" value="submit">
     </div>
-    <div id="step-two-states" style="clear: left;">
-      Select your state
-      <select>
-        <option value="AL">Alabama</option>
-        <option value="AK">Alaska</option>
-        <option value="AZ">Arizona</option>
-        <option value="AR">Arkansas</option>
-        <option value="CA">California</option>
-        <option value="CO">Colorado</option>
-        <option value="CT">Connecticut</option>
-        <option value="DE">Delaware</option>
-        <option value="DC">District Of Columbia</option>
-        <option value="FL">Florida</option>
-        <option value="GA">Georgia</option>
-        <option value="HI">Hawaii</option>
-        <option value="ID">Idaho</option>
-        <option value="IL">Illinois</option>
-        <option value="IN">Indiana</option>
-        <option value="IA">Iowa</option>
-        <option value="KS">Kansas</option>
-        <option value="KY">Kentucky</option>
-        <option value="LA">Louisiana</option>
-        <option value="ME">Maine</option>
-        <option value="MD">Maryland</option>
-        <option value="MA">Massachusetts</option>
-        <option value="MI">Michigan</option>
-        <option value="MN">Minnesota</option>
-        <option value="MS">Mississippi</option>
-        <option value="MO">Missouri</option>
-        <option value="MT">Montana</option>
-        <option value="NE">Nebraska</option>
-        <option value="NV">Nevada</option>
-        <option value="NH">New Hampshire</option>
-        <option value="NJ">New Jersey</option>
-        <option value="NM">New Mexico</option>
-        <option value="NY">New York</option>
-        <option value="NC">North Carolina</option>
-        <option value="ND">North Dakota</option>
-        <option value="OH">Ohio</option>
-        <option value="OK">Oklahoma</option>
-        <option value="OR">Oregon</option>
-        <option value="PA">Pennsylvania</option>
-        <option value="RI">Rhode Island</option>
-        <option value="SC">South Carolina</option>
-        <option value="SD">South Dakota</option>
-        <option value="TN">Tennessee</option>
-        <option value="TX">Texas</option>
-        <option value="UT">Utah</option>
-        <option value="VT">Vermont</option>
-        <option value="VA">Virginia</option>
-        <option value="WA">Washington</option>
-        <option value="WV">West Virginia</option>
-        <option value="WI">Wisconsin</option>
-        <option value="WY">Wyoming</option>
-      </select>
+    <div id="map" style="float: left;width:50%;height:400px;"></div>
+    <script>
+      var map;
+      var markers = [];
+      function initMap() {
+        var myLatlng = {lat: 40.104393, lng: -88.23051};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: myLatlng
+        });
+        var geocoder = new google.maps.Geocoder;
+        var infowindow = new google.maps.InfoWindow;
+        var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
 
-      Select your city
-      <select> 
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
 
-      </select>  
-      Select your neighborhood
-      <select>  
+        map.addListener('click', function(e) {
+          for(i=0; i<markers.length; i++){
+              markers[i].setMap(null);
+          }
+          markers = [];
+          Lat = e.latLng.lng();
+          Long = e.latLng.lat();
+          console.log(Lat);
+          console.log(Long);
+          placeMarker(e.latLng, map, image); 
+        });
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeLatLng(geocoder, map, infowindow);
+        });
+      }
+      function placeMarker(location, map, image) {
+        var marker = new google.maps.Marker({
+            position: location, 
+            map: map,
+            icon: image
+        });
+        markers.push(marker);
+      }
 
-      </select>
-      Select your type
-      <select>
+      function geocodeLatLng(geocoder, map, infowindow) {
+        var latlng = markers[0].position;
+        var bussiness_name = document.getElementById('bussiness-name').value;
         
-      </select>
-      <button type="button" style="clear: both;">Get Recommendations!</button>
-    </div>
-  </div>
-</section>
-<section id="step-three" class="section step-three">
-  <div class="container">
-    <div class="col-md-8 col-md-offset-2 text-center">
-      <h3>Step Three</h3>
-      <p>Open your own restaurant!</p>
-    </div>
-    <div id="step-three-states" style="clear: left;">
-      Select your state
-      <select>
-        <option value="AL">Alabama</option>
-        <option value="AK">Alaska</option>
-        <option value="AZ">Arizona</option>
-        <option value="AR">Arkansas</option>
-        <option value="CA">California</option>
-        <option value="CO">Colorado</option>
-        <option value="CT">Connecticut</option>
-        <option value="DE">Delaware</option>
-        <option value="DC">District Of Columbia</option>
-        <option value="FL">Florida</option>
-        <option value="GA">Georgia</option>
-        <option value="HI">Hawaii</option>
-        <option value="ID">Idaho</option>
-        <option value="IL">Illinois</option>
-        <option value="IN">Indiana</option>
-        <option value="IA">Iowa</option>
-        <option value="KS">Kansas</option>
-        <option value="KY">Kentucky</option>
-        <option value="LA">Louisiana</option>
-        <option value="ME">Maine</option>
-        <option value="MD">Maryland</option>
-        <option value="MA">Massachusetts</option>
-        <option value="MI">Michigan</option>
-        <option value="MN">Minnesota</option>
-        <option value="MS">Mississippi</option>
-        <option value="MO">Missouri</option>
-        <option value="MT">Montana</option>
-        <option value="NE">Nebraska</option>
-        <option value="NV">Nevada</option>
-        <option value="NH">New Hampshire</option>
-        <option value="NJ">New Jersey</option>
-        <option value="NM">New Mexico</option>
-        <option value="NY">New York</option>
-        <option value="NC">North Carolina</option>
-        <option value="ND">North Dakota</option>
-        <option value="OH">Ohio</option>
-        <option value="OK">Oklahoma</option>
-        <option value="OR">Oregon</option>
-        <option value="PA">Pennsylvania</option>
-        <option value="RI">Rhode Island</option>
-        <option value="SC">South Carolina</option>
-        <option value="SD">South Dakota</option>
-        <option value="TN">Tennessee</option>
-        <option value="TX">Texas</option>
-        <option value="UT">Utah</option>
-        <option value="VT">Vermont</option>
-        <option value="VA">Virginia</option>
-        <option value="WA">Washington</option>
-        <option value="WV">West Virginia</option>
-        <option value="WI">Wisconsin</option>
-        <option value="WY">Wyoming</option>
-      </select>
-
-      Select your city
-      <select> 
-
-      </select>  
-      Select your neighborhood
-      <select>  
-
-      </select>
-      Select your type
-      <select>
-        
-      </select>
-      <button type="button" style="clear: both;">Get Recommendations!</button>
-    </div>
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              map.setZoom(14);
+              
+              infowindow.setContent('Address: ' + results[0].formatted_address + ', Your bussiness name is: ' + bussiness_name);
+              infowindow.open(map,markers[0]);
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+      }
+    </script>
   </div>
 </section>
 <!-- work section --> 
@@ -439,5 +364,6 @@
 <script src="js/modernizr.js"></script> 
 <script src="js/main.js"></script> 
 <script type="text/javascript" src="js/jquery.contact.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDK_hgAPkV7pKv4oVlGV-BC_zGVQEFfjE&callback=initMap"async defer></script>
 </body>
 </html>
