@@ -1,0 +1,22 @@
+body {
+  position: relative;
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+input button {
+  padding: 100px;
+  margin: 100px;
+}
+
+h1 {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: lightcoral;
+}
+
+a {
+  color: #00B7FF;
+}
