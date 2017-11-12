@@ -93,15 +93,19 @@
       <h3>Open Your Bussiness!</h3>
       <p>Follow the steps to find your personalized recommendation</p>
     </div>
-    <div id="floating-panel" style="float: right;">
+    <div id="floating-panel" style="float: right;padding-top: 2cm;">
       <p>Bussiness Name</p>
       <input id="bussiness-name" type="text">
+      <p>Search Radius (feet)</p>
+      <input id="bussiness-radius" type="text">
       <input id="submit" type="button" value="submit">
     </div>
-    <div id="map" style="float: left;width:50%;height:400px;"></div>
+    <div id="map" style="float: left;width:60%;height:400px;padding-top: 2cm;"></div>
     <script>
       var map;
       var markers = [];
+      var Lat;
+      var Long;
       function initMap() {
         var myLatlng = {lat: 40.104393, lng: -88.23051};
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -137,12 +141,11 @@
           markers = [];
           Lat = e.latLng.lng();
           Long = e.latLng.lat();
-          console.log(Lat);
-          console.log(Long);
           placeMarker(e.latLng, map, image); 
         });
         document.getElementById('submit').addEventListener('click', function() {
           geocodeLatLng(geocoder, map, infowindow);
+
         });
       }
       function placeMarker(location, map, image) {
@@ -157,14 +160,50 @@
       function geocodeLatLng(geocoder, map, infowindow) {
         var latlng = markers[0].position;
         var bussiness_name = document.getElementById('bussiness-name').value;
-        
+        var bussiness_raduis = document.getElementById('bussiness-radius').value;
+
         geocoder.geocode({'location': latlng}, function(results, status) {
           if (status === 'OK') {
             if (results[0]) {
               map.setZoom(14);
               
-              infowindow.setContent('Address: ' + results[0].formatted_address + ', Your bussiness name is: ' + bussiness_name);
+              infowindow.setContent('Address: ' + results[0].formatted_address + ', Your bussiness name is: ' + bussiness_name + '. Search radius: ' + bussiness_raduis);
               infowindow.open(map,markers[0]);
+              var object = new Object();
+                object.name = bussiness_name;
+                object.radius = bussiness_raduis;
+                object.lat = Lat;
+                object.long = Long;
+              for (var j=0; j<results.length; j++)
+              {
+                  if (results[j].types[0]=='locality')
+                      {
+                          indice=j;
+                          break;
+                      }
+                  }
+              for (var i=0; i<results[j].address_components.length; i++)
+              {
+                  if (results[j].address_components[i].types[0] == "locality") {
+                      object.city = results[j].address_components[i].long_name;
+                      }
+                  if (results[j].address_components[i].types[0] == "administrative_area_level_1") {
+                      object.state = results[j].address_components[i].short_name;
+                      }
+                  if (results[j].address_components[i].types[0] == "neighborhood") {
+                      object.neighborhood = results[j].address_components[i];
+                      }
+                  else if (results[j].address_components[i].types[0] == "administrative_area_level_3"){
+                      object.neighborhood = results[j].address_components[i].long_name;
+                  }
+              }
+               $.get("/users", {
+                    object
+                }, function (data) {
+                    //data is the response from server
+                    //it's a list of json
+                    alert("response from server : " + data);
+                });
             } else {
               window.alert('No results found');
             }
@@ -326,18 +365,6 @@
             1800 1234 56789 / 98532100987<br>
             support@lexis.com</p>
           <p>Copyright © 2015 Lexis Inc. All Rights Reserved. Made with <i class="fa fa-heart pulse"></i> by <a href="http://www.designstub.com/">Designstub</a></p>
-        </div>
-        <div class="footer-col col-md-3">
-          <h5>Services We Offer</h5>
-          <p>
-          <ul>
-            <li><a href="#">Digital Strategy</a></li>
-            <li><a href="#">Websites</a></li>
-            <li><a href="#">Videography</a></li>
-            <li><a href="#">Social Media</a></li>
-            <li><a href="#">User Experience</a></li>
-          </ul>
-          </p>
         </div>
         <div class="footer-col col-md-3">
           <h5>Share with Love</h5>
