@@ -174,6 +174,9 @@
                 object.radius = bussiness_raduis;
                 object.lat = Lat;
                 object.long = Long;
+                object.address = results[0].formatted_address;
+                //operation 1,2,3,4 are create, read, update and delete respectively
+                object.operationType = 4;
               for (var j=0; j<results.length; j++)
               {
                   if (results[j].types[0]=='locality')
@@ -187,6 +190,9 @@
                   if (results[j].address_components[i].types[0] == "locality") {
                       object.city = results[j].address_components[i].long_name;
                       }
+                  if (results[j].address_components[i].types[0] == "postal_code") {
+                      object.postal_code = results[j].address_components[i].long_name;
+                  }
                   if (results[j].address_components[i].types[0] == "administrative_area_level_1") {
                       object.state = results[j].address_components[i].short_name;
                       }
@@ -197,9 +203,7 @@
                       object.neighborhood = results[j].address_components[i].long_name;
                   }
               }
-               $.get("/users", {
-                    object
-                }, function (data) {
+               $.post("/users", object, function (data) {
                     //data is the response from server
                     //it's a list of json
                     alert("response from server : " + data);
