@@ -29,11 +29,14 @@ router.post('/', function(req, res, next) {
             res.sendStatus(500);
             throw error;
         } else if (results.length === 0) {
+            console.log("create");
             //create
             let id = crypto.randomBytes(11).toString("hex");
-            let createSql = "INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude," +
-                "longitude) VALUES ?";
-            connection.query(createSql, [id, name, neighborhood, address, city, state, postal_code, lat, long], function (error) {
+            // let createSql = "INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude," +
+            //     "longitude) VALUES ?";
+            let createSql = "INSERT INTO business (id, name) VALUES ?";
+            // [id, name, neighborhood, address, city, state, postal_code, lat, long]
+            connection.query(createSql, [id, "test"], function (error) {
                 if (error) {
                     res.sendStatus(500);
                     throw error;
