@@ -93,12 +93,21 @@
       <h3>Open Your Bussiness!</h3>
       <p>Follow the steps to find your personalized recommendation</p>
     </div>
-    <div id="floating-panel" style="float: right;padding-top: 2cm;">
+    <div id="floating-panel" style="float: right;padding-top: 1cm;">
       <p>Bussiness Name</p>
       <input id="bussiness-name" type="text">
       <p>Search Radius (feet)</p>
       <input id="bussiness-radius" type="text">
       <input id="submit" type="button" value="submit">
+      <p id="counter" style="padding-top: 1cm">My Resturants</p>
+        <table>
+        <tr>
+          <th>Name</th>
+          <th style="padding-left: 1cm">Radius</th>
+        </tr>
+          <tbody id="resturants">
+          </tbody>
+      </table>
     </div>
     <div id="map" style="float: left;width:60%;height:400px;padding-top: 2cm;"></div>
     <script>
@@ -158,6 +167,10 @@
       }
 
       function geocodeLatLng(geocoder, map, infowindow) {
+        if(markers[0] === undefined){
+          window.alert('Please select location on map');
+          return;
+        }
         var latlng = markers[0].position;
         var bussiness_name = document.getElementById('bussiness-name').value;
         var bussiness_raduis = document.getElementById('bussiness-radius').value;
@@ -176,7 +189,7 @@
                 object.long = Long;
                 object.address = results[0].formatted_address;
                 //operation 1,2,3,4 are create, read, update and delete respectively
-                object.operationType = 4;
+                object.operationType = 1;
               for (var j=0; j<results.length; j++)
               {
                   if (results[j].types[0]=='locality')
@@ -203,11 +216,7 @@
                       object.neighborhood = results[j].address_components[i].long_name;
                   }
               }
-               $.post("/users", object, function (data) {
-                    //data is the response from server
-                    //it's a list of json
-                    alert("response from server : " + data);
-                });
+               app.Add(object);
             } else {
               window.alert('No results found');
             }
@@ -216,6 +225,106 @@
           }
         });
       }
+      var app = new function() {
+      this.el = document.getElementById('resturants');
+      this.radius = document.getElementById('resturants');
+      this.resturants = [];
+      this.radii = [];
+      this.Count = function(data) {
+        var el   = document.getElementById('counter');
+        var name = 'resturant';
+        if (data) {
+          if (data > 1) {
+            name = 'resturants';
+          }
+          el.innerHTML = data + ' ' + name ;
+        } else {
+          el.innerHTML = 'No ' + name;
+        }
+      };
+      
+      this.FetchAll = function() {
+        var data = '';
+        if (this.resturants.length > 0) {
+          for (i = 0; i < this.resturants.length; i++) {
+            data += '<tr>';
+            data += '<td onclick="app.Read(' + i + ')">' + this.resturants[i] + '</td>';
+            data += '<td style="padding-left: 1cm">' + this.radii[i] + '</td>';
+            data += '<td style="padding-left: 1cm"><button onclick="app.Delete(' + i + ')">Delete</button></td>';
+            data += '</tr>';
+          }
+        }
+        this.Count(this.resturants.length);
+        return this.el.innerHTML = data;
+      };
+      this.Add = function (object) {
+        el = document.getElementById('bussiness-name');
+        radius = document.getElementById('bussiness-radius');
+        // Get the value
+        var resturant = el.value;
+        if (resturant) {
+          if(this.resturants.find(k => k == resturant)===resturant){
+            for (var i = 0; i < this.resturants.length; i++) {
+              if(this.resturants[i] == resturant)
+                this.radii[i] = radius.value.trim();
+            }
+            
+            console.log('Updated resturant with name:'+resturant.trim()+' and radius: '+radius.value.trim());
+            object.operationType = 3;
+            $.post("/users", object, function (data) {
+                    //data is the response from server
+                    //it's a list of json
+                    alert("response from server : " + data);
+                });
+            this.FetchAll();
+            return;
+          }
+          // Add the new value
+          this.resturants.push(resturant.trim());
+          this.radii.push(radius.value.trim());
+          console.log('Added resturant with name:'+resturant.trim()+' and radius: '+radius.value.trim());
+          // Reset input value
+          el.value = '';
+          radius.value = '';
+          // Dislay the new list
+          this.FetchAll();
+        }
+        $.post("/users", object, function (data) {
+                    //data is the response from server
+                    //it's a list of json
+                    alert("response from server : " + data);
+        });
+      };
+      this.Read = function (item) {
+        console.log('Reading resturant with name: ' + this.resturants[item]);
+        var object = new Object();
+        object.name = this.resturants[item];
+        object.operationType = 2;
+            $.post("/users", object, function (data) {
+                    //data is the response from server
+                    //it's a list of json
+                    console.log(data);
+                });
+      }
+      this.Delete = function (item) {
+        // Delete the current row
+        
+        var object = new Object();
+                console.log('Delete resturant with name:'+this.resturants[item]);
+                object.name = this.resturants[item];
+                //operation 1,2,3,4 are create, read, update and delete respectively
+                object.operationType = 1;
+        this.resturants.splice(item, 1);
+        
+        // Display the new list
+        $.post("/users", object, function (data) {
+                    //data is the response from server
+                    //it's a list of json
+                    alert("response from server : " + data);
+                });
+        this.FetchAll();
+      }; 
+    }
     </script>
   </div>
 </section>
@@ -365,10 +474,10 @@
       <div class="row">
         <div class="footer-col col-md-6">
           <h5>Our Office Location</h5>
-          <p>Collins Street West Victoria 8007 Australia.<br>
-            1800 1234 56789 / 98532100987<br>
-            support@lexis.com</p>
-          <p>Copyright © 2015 Lexis Inc. All Rights Reserved. Made with <i class="fa fa-heart pulse"></i> by <a href="http://www.designstub.com/">Designstub</a></p>
+          <p>201 N Goodwin Ave, Urbana, IL 61820<br>
+            123-456-7890<br>
+            support@rocketeer.com</p>
+          <p>Copyright © 2017 Rocketeer Inc. All Rights Reserved. Made with <i class="fa fa-heart pulse"></i> for CS 411 Project</p>
         </div>
         <div class="footer-col col-md-3">
           <h5>Share with Love</h5>
