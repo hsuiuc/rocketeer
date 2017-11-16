@@ -32,6 +32,7 @@ router.post('/', function(req, res, next) {
             console.log("create");
             //create
             let id = crypto.randomBytes(11).toString("hex");
+            console.log(id);
             // let createSql = "INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude," +
             //     "longitude) VALUES ?";
             let createSql = "INSERT INTO business (id, name) VALUES ?";
