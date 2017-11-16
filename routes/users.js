@@ -35,8 +35,8 @@ router.post('/', function(req, res, next) {
             //console.log(id);
             let createSql = "INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude," +
                 "longitude) VALUES ?";
-            
-            connection.query(createSql, [[id, name, neighborhood, address, city, state, postal_code, lat, long]], function (error) {
+            let value = [id, name, neighborhood, address, city, state, postal_code, lat, long];
+            connection.query(createSql, [value], function (error) {
                 if (error) {
                     res.sendStatus(500);
                     throw error;
