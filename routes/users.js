@@ -30,14 +30,12 @@ router.post('/', function(req, res, next) {
             throw error;
         } else if (results.length === 0) {
             console.log("create");
-            //create
-            //let id = crypto.randomBytes(11).toString("hex");
+
+            let id = crypto.randomBytes(11).toString("hex");
             //console.log(id);
-            // let createSql = "INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude," +
-            //     "longitude) VALUES ?";
-            let createSql = "INSERT INTO business (id, name) VALUES ?";
-            // [id, name, neighborhood, address, city, state, postal_code, lat, long]
-            let value = [['aaa', 'test']];
+            let createSql = "INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude," +
+                "longitude) VALUES ?";
+            let value =  [[id, name, neighborhood, address, city, state, postal_code, lat, long]];
             connection.query(createSql, [value], function (error) {
                 if (error) {
                     res.sendStatus(500);
