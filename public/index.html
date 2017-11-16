@@ -66,8 +66,8 @@
     <div class="row">
       <div class="col-md-4 col-sm-6 services text-center"> <span class="icon icon-strategy"></span>
         <div class="services-content">
-          <h5>基本功能</h5>
-          <p>还不确定？</p>
+          <h5>Pinpoint a location on Map</h5>
+          <p>lalala</p>
         </div>
       </div>
       <div class="col-md-4 col-sm-6 services text-center"> <span class="icon icon-search"></span>
@@ -192,6 +192,9 @@
                 object.operationType = 1;
               for (var j=0; j<results.length; j++)
               {
+                  if (results[j].types[0] == "postal_code") {
+                      object.postal_code = results[j].long_name;
+                  }
                   if (results[j].types[0]=='locality')
                       {
                           indice=j;
@@ -271,7 +274,7 @@
             
             console.log('Updated resturant with name:'+resturant.trim()+' and radius: '+radius.value.trim());
             object.operationType = 3;
-            $.post("/users", object, function (data) {
+            $.get("/users", object, function (data) {
                     //data is the response from server
                     //it's a list of json
                     alert("response from server : " + data);
@@ -282,42 +285,44 @@
           // Add the new value
           this.resturants.push(resturant.trim());
           this.radii.push(radius.value.trim());
-          console.log('Added resturant with name:'+resturant.trim()+' and radius: '+radius.value.trim());
+          console.log('Created resturant with name:'+resturant.trim()+' and radius: '+radius.value.trim());
           // Reset input value
           el.value = '';
           radius.value = '';
           // Dislay the new list
           this.FetchAll();
-        }
-        $.post("/users", object, function (data) {
+          console.log(object);
+          $.get("/users", object, function (data) {
                     //data is the response from server
                     //it's a list of json
                     alert("response from server : " + data);
-        });
+          });
+        }
+        
       };
       this.Read = function (item) {
         console.log('Reading resturant with name: ' + this.resturants[item]);
         var object = new Object();
         object.name = this.resturants[item];
         object.operationType = 2;
-            $.post("/users", object, function (data) {
+            $.get("/users", object, function (data) {
                     //data is the response from server
                     //it's a list of json
-                    console.log(data);
+                    alert(data);
                 });
       }
       this.Delete = function (item) {
         // Delete the current row
         
         var object = new Object();
-                console.log('Delete resturant with name:'+this.resturants[item]);
+                console.log('Deleted resturant with name:'+this.resturants[item]);
                 object.name = this.resturants[item];
                 //operation 1,2,3,4 are create, read, update and delete respectively
-                object.operationType = 1;
+                object.operationType = 4;
         this.resturants.splice(item, 1);
         
         // Display the new list
-        $.post("/users", object, function (data) {
+        $.get("/users", object, function (data) {
                     //data is the response from server
                     //it's a list of json
                     alert("response from server : " + data);

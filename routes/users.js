@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
 connection.connect();
 
 /* GET users listing. */
-router.post('/', function(req, res, next) {
+router.get('/', function(req, res, next) {
   //res.send('respond with a resource');
     const name = req.query.name;
     const neighborhood = req.query.neighborhood;
@@ -23,7 +23,7 @@ router.post('/', function(req, res, next) {
     const long = req.query.long;
     const operationType = parseInt(req.query.operationType);
     const radius = req.query.radius;
-
+    
     connection.query("select * from business where name = ? limit 5", [name], function (error, results, fields) {
         if (error) {
             res.sendStatus(500);
@@ -34,7 +34,8 @@ router.post('/', function(req, res, next) {
             let id = crypto.randomBytes(11).toString("hex");
             //console.log(id);
             let createSql = "INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude, longitude) VALUES ?";
-            let value = [id, name, neighborhood, address, city, state, postal_code, lat, long];
+            let value = [[id, name, neighborhood, address, city, state, postal_code, lat, long]];
+            
             connection.query(createSql, [value], function (error) {
                 if (error) {
                     res.sendStatus(500);
