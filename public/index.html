@@ -190,11 +190,16 @@
                 object.address = results[0].formatted_address;
                 //operation 1,2,3,4 are create, read, update and delete respectively
                 object.operationType = 1;
+                console.log(results);
+                for (var j=0; j<results[0].address_components.length; j++)
+                {
+                  if (results[0].address_components[j].types[0] == "postal_code") {
+                      object.postal_code = results[0].address_components[j].long_name;
+                      break;
+                  }
+                }
               for (var j=0; j<results.length; j++)
               {
-                  if (results[j].types[0] == "postal_code") {
-                      object.postal_code = results[j].long_name;
-                  }
                   if (results[j].types[0]=='locality')
                       {
                           indice=j;
@@ -206,9 +211,6 @@
                   if (results[j].address_components[i].types[0] == "locality") {
                       object.city = results[j].address_components[i].long_name;
                       }
-                  if (results[j].address_components[i].types[0] == "postal_code") {
-                      object.postal_code = results[j].address_components[i].long_name;
-                  }
                   if (results[j].address_components[i].types[0] == "administrative_area_level_1") {
                       object.state = results[j].address_components[i].short_name;
                       }
