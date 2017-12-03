@@ -17,6 +17,7 @@ $(document).ready(function() {
 	$('.flexslider').flexslider({
 		animation: "fade",
 		directionNav: false,
+		pauseOnAction: true,
 	});
 
 	// Page Scroll
