@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
     let city = query.city;
     let category = query.category; //an array of string
 
-    connection.query('select * from business, category where state = ? and city = ? and category = ? limit 25', [state, city, category], function (error, results, fields) {
+    connection.query('select * from business, category where business.id = category.business_id and state = ? and city = ? and category = ? limit 25', [state, city, category], function (error, results, fields) {
         if (error) {
             res.sendStatus(500);
             throw error;
