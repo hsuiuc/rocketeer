@@ -94,437 +94,509 @@ function googleTranslateElementInit() {
 </section>
 <!-- services section --> 
 <!-- work section -->
-<section id="step-one" class="class=section steps">
-  <div class="container-fluid">
-    <div class="row no-gutter">
-      <div class="flexslider">
-        <ul class="slides">
-          <li>
-            <div class="col-md-12">
-              <blockquote>
-               <div class="container">
-                  <div class="col-md-8 col-md-offset-2 text-center">
-                    <h3>Create Your Restaurant!</h3>
-                    <p>Follow the steps to find your personalized recommendation</p>
-                  </div>
-                  <div id="floating-panel" style="float: right;padding-top: 1cm;">
-                    <p>Bussiness Name</p>
-                    <input id="bussiness-name" type="text">
-                    <p>Search Radius (feet)</p>
-                    <input id="bussiness-radius" type="text">
-                    <br>
-                    <br>
-                    <input id="submit" type="button" value="submit">
-                    <p id="counter" style="padding-top: 1cm">My Restaurants</p>
-                      <table>
-                      <tr>
-                        <th>Name</th>
-                        <th style="padding-left: 3cm">Radius</th>
-                      </tr>
-                        <tbody id="resturants">
-                        </tbody>
-                    </table>
-                  </div>
-                  <div id="map" style="float: left;width:60%;height:400px;padding-top: 2cm;"></div>
-                  <script>
-                    var map;
-                    var markers = [];
-                    var Lat;
-                    var Long;
-                    function initMap() {
-                      var myLatlng = {lat: 40.104393, lng: -88.23051};
-                      var map = new google.maps.Map(document.getElementById('map'), {
-                        zoom: 14,
-                        center: myLatlng
-                      });
-                      var geocoder = new google.maps.Geocoder;
-                      var infowindow = new google.maps.InfoWindow;
-                      var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-                      if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                          var pos = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                          };
-
-                          infoWindow.setPosition(pos);
-                          infoWindow.setContent('Location found.');
-                          infoWindow.open(map);
-                          map.setCenter(pos);
-                        }, function() {
-                          handleLocationError(true, infoWindow, map.getCenter());
-                        });
-                      } else {
-                        // Browser doesn't support Geolocation
-                        handleLocationError(false, infoWindow, map.getCenter());
-                      }
-
-                      map.addListener('click', function(e) {
-                        for(i=0; i<markers.length; i++){
-                            markers[i].setMap(null);
-                        }
-                        markers = [];
-                        Lat = e.latLng.lng();
-                        Long = e.latLng.lat();
-                        placeMarker(e.latLng, map, image); 
-                      });
-                      document.getElementById('submit').addEventListener('click', function() {
-                        geocodeLatLng(geocoder, map, infowindow);
-                      });
-                    }
-                    function placeMarker(location, map, image) {
-                      var marker = new google.maps.Marker({
-                          position: location, 
-                          map: map,
-                          icon: image
-                      });
-                      markers.push(marker);
-                    }
-
-                    function geocodeLatLng(geocoder, map, infowindow) {
-                      if(markers[0] === undefined){
-                        window.alert('Please select location on map');
-                        return;
-                      }
-                      var latlng = markers[0].position;
-                      var bussiness_name = document.getElementById('bussiness-name').value;
-                      var bussiness_raduis = document.getElementById('bussiness-radius').value;
-
-                      geocoder.geocode({'location': latlng}, function(results, status) {
-                        if (status === 'OK') {
-                          if (results[0]) {
-                            map.setZoom(14);
-                            
-                            infowindow.setContent('Address: ' + results[0].formatted_address + ', Your bussiness name is: ' + bussiness_name + '. Search radius: ' + bussiness_raduis);
-                            infowindow.open(map,markers[0]);
-                            var object = new Object();
-                              object.name = bussiness_name;
-                              object.radius = bussiness_raduis;
-                              object.lat = Lat;
-                              object.long = Long;
-                              object.address = results[0].formatted_address;
-                              //operation 1,2,3,4 are create, read, update and delete respectively
-                              object.operationType = 1;
-                              console.log(results);
-                              for (var j=0; j<results[0].address_components.length; j++)
-                              {
-                                if (results[0].address_components[j].types[0] == "postal_code") {
-                                    object.postal_code = results[0].address_components[j].long_name;
-                                    break;
-                                }
-                              }
-                            for (var j=0; j<results.length; j++)
-                            {
-                                if (results[j].types[0]=='locality')
-                                    {
-                                        indice=j;
-                                        break;
-                                    }
-                                }
-                            for (var i=0; i<results[j].address_components.length; i++)
-                            {
-                                if (results[j].address_components[i].types[0] == "locality") {
-                                    object.city = results[j].address_components[i].long_name;
-                                    }
-                                if (results[j].address_components[i].types[0] == "administrative_area_level_1") {
-                                    object.state = results[j].address_components[i].short_name;
-                                    }
-                                if (results[j].address_components[i].types[0] == "neighborhood") {
-                                    object.neighborhood = results[j].address_components[i];
-                                    }
-                                else if (results[j].address_components[i].types[0] == "administrative_area_level_3"){
-                                    object.neighborhood = results[j].address_components[i].long_name;
-                                }
-                            }
-                             app.Add(object);
-                          } else {
-                            window.alert('No results found');
-                          }
-                        } else {
-                          window.alert('Geocoder failed due to: ' + status);
-                        }
-                      });
-                    }
-                    var app = new function() {
-                    this.el = document.getElementById('resturants');
-                    this.radius = document.getElementById('resturants');
-                    this.resturants = [];
-                    this.radii = [];
-                    this.Count = function(data) {
-                      var el   = document.getElementById('counter');
-                      var name = 'resturant';
-                      if (data) {
-                        if (data > 1) {
-                          name = 'resturants';
-                        }
-                        el.innerHTML = data + ' ' + name ;
-                      } else {
-                        el.innerHTML = 'No ' + name;
-                      }
-                    };
-                    
-                    this.FetchAll = function() {
-                      var data = '';
-                      if (this.resturants.length > 0) {
-                        for (i = 0; i < this.resturants.length; i++) {
-                          data += '<tr>';
-                          data += '<td onclick="app.Read(' + i + ')">' + this.resturants[i] + '</td>';
-                          data += '<td style="padding-left: 1cm">' + this.radii[i] + '</td>';
-                          data += '<td style="padding-left: 1cm"><button onclick="app.Delete(' + i + ')">Delete</button></td>';
-                          data += '</tr>';
-                        }
-                      }
-                      this.Count(this.resturants.length);
-                      return this.el.innerHTML = data;
-                    };
-                    this.Add = function (object) {
-                      el = document.getElementById('bussiness-name');
-                      radius = document.getElementById('bussiness-radius');
-                      // Get the value
-                      var resturant = el.value;
-                      if (resturant) {
-                        if(this.resturants.find(k => k == resturant)===resturant){
-                          for (var i = 0; i < this.resturants.length; i++) {
-                            if(this.resturants[i] == resturant)
-                              this.radii[i] = radius.value.trim();
-                          }
-                          
-                          console.log('Updated resturant with name:'+resturant.trim()+' and radius: '+radius.value.trim());
-                          object.operationType = 3;
-                          $.get("/users", object, function (data) {
-                                  //data is the response from server
-                                  //it's a list of json
-                                  alert("response from server : " + data);
-                              });
-                          this.FetchAll();
-                          return;
-                        }
-                        // Add the new value
-                        this.resturants.push(resturant.trim());
-                        this.radii.push(radius.value.trim());
-                        console.log('Created resturant with name:'+resturant.trim()+' and radius: '+radius.value.trim());
-                        // Reset input value
-                        el.value = '';
-                        radius.value = '';
-                        // Dislay the new list
-                        this.FetchAll();
-                        console.log(object);
-                        $.get("/users", object, function (data) {
-                                  //data is the response from server
-                                  //it's a list of json
-                                  alert("response from server : " + data);
-                        });
-                      }
-                      
-                    };
-                    this.Read = function (item) {
-                      console.log('Reading resturant with name: ' + this.resturants[item]);
-                      var object = new Object();
-                      object.name = this.resturants[item];
-                      object.operationType = 2;
-                          $.get("/users", object, function (data) {
-                                  //data is the response from server
-                                  //it's a list of json
-                                  alert(data);
-                              });
-                    }
-                    this.Delete = function (item) {
-                      // Delete the current row
-                      
-                      var object = new Object();
-                              console.log('Deleted resturant with name:'+this.resturants[item]);
-                              object.name = this.resturants[item];
-                              //operation 1,2,3,4 are create, read, update and delete respectively
-                              object.operationType = 4;
-                      this.resturants.splice(item, 1);
-                      
-                      // Display the new list
-                      $.get("/users", object, function (data) {
-                                  //data is the response from server
-                                  //it's a list of json
-                                  alert("response from server : " + data);
-                              });
-                      this.FetchAll();
-                    }; 
-                  }
-                  </script>
-                </div>
-              </blockquote>
-            </div>
-          </li>
-          <li>
-            <div class="col-md-12">
-              <blockquote>
-                <div class="container">
-                  <div class="col-md-8 col-md-offset-2 text-center">
-                    <h3>Discover Your Neighborhood!</h3>
-                    <p>Find out what category is more popular around your neighborhood</p>
-                  </div>
-                  <div id="floating-panel-two" style="padding-top: 1cm;float: left;width: 30%">
-                    <p>State</p>
-                    <input id="state_two" type="text">
-                    <p>City</p>
-                    <input id="city_two" type="text">
-                    <p>Neighborhood</p>
-                    <input id="neighborhood_two" type="text">
-                    <br>
-                    <br>
-                    <input id="search" type="button" value="search">
-                  </div>
-                  <div style="padding-top: 1cm;float: left;width: 30%;text-align: left;padding-left: 2cm">
-                    <p>Category</p>
-                    <input type="checkbox" name="type" value="Sandwiches"> Sandwiches<br>
-                    <input type="checkbox" name="type" value="Pizza"> Pizza<br>
-                    <input type="checkbox" name="type" value="Coffee & Tea"> Coffee & Tea<br>
-                    <input type="checkbox" name="type" value="Breakfast & Brunch"> Breakfast & Brunch<br>
-                    <input type="checkbox" name="type" value="Chinese"> Chinese<br>
-                    <input type="checkbox" name="type" value="Specialty Food"> Specialty Food<br>
-                    <input type="checkbox" name="type" value="Desserts"> Desserts<br>
-                    <input type="checkbox" name="type" value="Japanese"> Japanese<br>
-                    <input type="checkbox" name="type" value="Seafood"> Seafood<br>
-                    <input type="checkbox" name="type" value="Salad"> Salad<br>
-                    <input type="checkbox" name="type" value="Wine & Spirits"> Wine & Spirits<br>
-                  </div>
-                  <div id="return-results" style="float: right;padding-right: 5cm">
-                    <p id="counter" style="padding-top: 1cm">Search Results</p>
-                      <table>
-                      <tr>
-                        <th>Name</th>
-                        <th style="padding-left: 3cm">Type</th>
-                      </tr>
-                        <tbody id="return-results">
-                        </tbody>
-                    </table>
-                  </div>
-                  <script type="text/javascript">
-                    document.getElementById('search').addEventListener('click', function() {
-                      var checked=[];
-                      $("input:checkbox[name=type]:checked").each(function(){
-                          checked.push($(this).val());
-                      });
-                      var state_two = document.getElementById('state_two');
-                      var city_two = document.getElementById('city_two');
-                      var neighborhood_two = document.getElementById('neighborhood_two');
-                      //console.log('Searching location with state:'+state_two.value.trim()+', city: '+city_two.value.trim()+'and neighborhood: '+neighborhood_two.value.trim());
-                      // Reset input value
-                      
-                      // Dislay the new list
-                      var object = new Object();
-                      object.state = state_two.value.trim();
-                      object.city = city_two.value.trim();
-                      object.neighborhood = neighborhood_two.value.trim();
-                      object.checked = checked;
-                      console.log(object);
-                      // $.get("/discover", object, function (data) {
-                      //           //data is the response from server
-                      //           //it's a list of json
-                      //           alert("response from server : " + data);
-                      // });
-                      
-                      var results = '<p id="counter" style="padding-top: 1cm">Search Results</p>';
-                      document.getElementById('return-results').innerHTML += results;
-                      // if (data.length > 0) {
-                      //   for (i = 0; i < data.length; i++) {
-                      //     results += '<tr>';
-                      //     results += '<td ' + data.names[i] + '</td>';
-                      //     results += '<td style="padding-left: 1cm">' + data.types[i] + '</td>';
-                      //     results += '</tr>';
-                      //   }
-                      // }
-                      console.log(results)
-                      document.getElementById('return-results').innerHTML = results;
-                      state_two.value = '';
-                      city_two.value = '';
-                      neighborhood_two.value = '';
-                    });
-                  </script>
-                </div>
-              </blockquote>
-            </div>
-          </li>
-          <li>
-            <div class="col-md-12">
-              <blockquote>
-                <div class="container">
-                  <div class="col-md-8 col-md-offset-2 text-center">
-                    <h3>Open Your Restaurant!</h3>
-                    <p>Get tips for a successful bussiness</p>
-                  </div>
-                  <div id="floating-panel-two" style="padding-top: 1cm;float: left;width: 30%">
-                    <p>State</p>
-                    <input id="state_two" type="text">
-                    <p>City</p>
-                    <input id="city_two" type="text">
-                    <p>Neighborhood</p>
-                    <input id="neighborhood_two" type="text">
-                    <br>
-                    <br>
-                    <input id="rating" type="button" value="Get Probability">
-                  </div>
-                  <div style="padding-top: 1cm;float: left;width: 30%;text-align: left;padding-left: 2cm">
-                    <p>Category</p>
-                    <input type="checkbox" name="type" value="Sandwiches"> Sandwiches<br>
-                    <input type="checkbox" name="type" value="Pizza"> Pizza<br>
-                    <input type="checkbox" name="type" value="Coffee & Tea"> Coffee & Tea<br>
-                    <input type="checkbox" name="type" value="Breakfast & Brunch"> Breakfast & Brunch<br>
-                    <input type="checkbox" name="type" value="Chinese"> Chinese<br>
-                    <input type="checkbox" name="type" value="Specialty Food"> Specialty Food<br>
-                    <input type="checkbox" name="type" value="Desserts"> Desserts<br>
-                    <input type="checkbox" name="type" value="Japanese"> Japanese<br>
-                    <input type="checkbox" name="type" value="Seafood"> Seafood<br>
-                    <input type="checkbox" name="type" value="Salad"> Salad<br>
-                    <input type="checkbox" name="type" value="Wine & Spirits"> Wine & Spirits<br>
-                  </div>
-                  <div id="success-number" style="float: right;padding-right: 5cm">
-                    <p id="counter" style="padding-top: 1cm">Probability of Success</p>
-                        <tbody id="success-number">
-                        </tbody>
-                  </div>
-                  <script type="text/javascript">
-                    document.getElementById('rating').addEventListener('click', function() {
-                      var checked=[];
-                      $("input:checkbox[name=type]:checked").each(function(){
-                          checked.push($(this).val());
-                      });
-                      var state_two = document.getElementById('state_two');
-                      var city_two = document.getElementById('city_two');
-                      var neighborhood_two = document.getElementById('neighborhood_two');
-                      //console.log('Searching location with state:'+state_two.value.trim()+', city: '+city_two.value.trim()+'and neighborhood: '+neighborhood_two.value.trim());
-                      var object = new Object();
-                      object.state = state_two.value.trim();
-                      object.city = city_two.value.trim();
-                      object.neighborhood = neighborhood_two.value.trim();
-                      object.checked = checked;
-                      console.log(object);
-                      // $.get("/discover", object, function (data) {
-                      //           //data is the response from server
-                      //           //it's a list of json
-                      //           alert("response from server : " + data);
-                      // });                     
-                      var text = '<p id="counter" style="padding-top: 1cm">Probability of Success</p>';
-                      
-                      // if (data.length > 0) {
-                      //   for (i = 0; i < data.length; i++) {
-                      //     results += '<tr>';
-                      //     results += '<td ' + data.names[i] + '</td>';
-                      //     results += '<td style="padding-left: 1cm">' + data.types[i] + '</td>';
-                      //     results += '</tr>';
-                      //   }
-                      // }
-                      text+='<br><br><br><br><br>50%'
-                      document.getElementById('success-number').innerHTML = text;
-                      state_two.value = '';
-                      city_two.value = '';
-                      neighborhood_two.value = '';
-                    });
-                  </script>
-                </div>
-              </blockquote>
-            </div>
-          </li>
-        </ul>
+<section id="step-one" class="section step-one">
+  <div class="container">
+      <div class="col-md-8 col-md-offset-2 text-center">
+        <h3>Create Your Restaurant!</h3>
+        <p>Follow the steps to find your personalized recommendation</p>
       </div>
+      <div id="floating-panel" style="float: right;padding-top: 1cm;">
+        <p>Bussiness Name</p>
+        <input id="bussiness-name" type="text">
+        <p>Search Radius (feet)</p>
+        <input id="bussiness-radius" type="text">
+        <br>
+        <br>
+        <input id="submit" type="button" value="submit">
+        <p id="counter" style="padding-top: 1cm">My Restaurants</p>
+          <table>
+          <tr>
+            <th>Name</th>
+            <th style="padding-left: 3cm">Radius</th>
+          </tr>
+            <tbody id="resturants">
+            </tbody>
+        </table>
+      </div>
+      <div id="map" style="float: left;width:60%;height:400px;padding-top: 2cm;"></div>
+      <script>
+        var map;
+        var markers = [];
+        var Lat;
+        var Long;
+        function initMap() {
+          var myLatlng = {lat: 40.104393, lng: -88.23051};
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 14,
+            center: myLatlng
+          });
+          var geocoder = new google.maps.Geocoder;
+          var infowindow = new google.maps.InfoWindow;
+          var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              };
+
+              infoWindow.setPosition(pos);
+              infoWindow.setContent('Location found.');
+              infoWindow.open(map);
+              map.setCenter(pos);
+            }, function() {
+              handleLocationError(true, infoWindow, map.getCenter());
+            });
+          } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+          }
+
+          map.addListener('click', function(e) {
+            for(i=0; i<markers.length; i++){
+                markers[i].setMap(null);
+            }
+            markers = [];
+            Lat = e.latLng.lng();
+            Long = e.latLng.lat();
+            placeMarker(e.latLng, map, image); 
+          });
+          document.getElementById('submit').addEventListener('click', function() {
+            geocodeLatLng(geocoder, map, infowindow);
+          });
+        }
+        function placeMarker(location, map, image) {
+          var marker = new google.maps.Marker({
+              position: location, 
+              map: map,
+              icon: image
+          });
+          markers.push(marker);
+        }
+
+        function geocodeLatLng(geocoder, map, infowindow) {
+          if(markers[0] === undefined){
+            window.alert('Please select location on map');
+            return;
+          }
+          var latlng = markers[0].position;
+          var bussiness_name = document.getElementById('bussiness-name').value;
+          var bussiness_raduis = document.getElementById('bussiness-radius').value;
+
+          geocoder.geocode({'location': latlng}, function(results, status) {
+            if (status === 'OK') {
+              if (results[0]) {
+                map.setZoom(14);
+                
+                infowindow.setContent('Address: ' + results[0].formatted_address + ', Your bussiness name is: ' + bussiness_name + '. Search radius: ' + bussiness_raduis);
+                infowindow.open(map,markers[0]);
+                var object = new Object();
+                  object.name = bussiness_name;
+                  object.radius = bussiness_raduis;
+                  object.lat = Lat;
+                  object.long = Long;
+                  object.address = results[0].formatted_address;
+                  //operation 1,2,3,4 are create, read, update and delete respectively
+                  object.operationType = 1;
+                  console.log(results);
+                  for (var j=0; j<results[0].address_components.length; j++)
+                  {
+                    if (results[0].address_components[j].types[0] == "postal_code") {
+                        object.postal_code = results[0].address_components[j].long_name;
+                        break;
+                    }
+                  }
+                for (var j=0; j<results.length; j++)
+                {
+                    if (results[j].types[0]=='locality')
+                        {
+                            indice=j;
+                            break;
+                        }
+                    }
+                for (var i=0; i<results[j].address_components.length; i++)
+                {
+                    if (results[j].address_components[i].types[0] == "locality") {
+                        object.city = results[j].address_components[i].long_name;
+                        }
+                    if (results[j].address_components[i].types[0] == "administrative_area_level_1") {
+                        object.state = results[j].address_components[i].short_name;
+                        }
+                    if (results[j].address_components[i].types[0] == "neighborhood") {
+                        object.neighborhood = results[j].address_components[i];
+                        }
+                    else if (results[j].address_components[i].types[0] == "administrative_area_level_3"){
+                        object.neighborhood = results[j].address_components[i].long_name;
+                    }
+                }
+                 app.Add(object);
+              } else {
+                window.alert('No results found');
+              }
+            } else {
+              window.alert('Geocoder failed due to: ' + status);
+            }
+          });
+        }
+        var app = new function() {
+        this.el = document.getElementById('resturants');
+        this.radius = document.getElementById('resturants');
+        this.resturants = [];
+        this.radii = [];
+        this.Count = function(data) {
+          var el   = document.getElementById('counter');
+          var name = 'resturant';
+          if (data) {
+            if (data > 1) {
+              name = 'resturants';
+            }
+            el.innerHTML = data + ' ' + name ;
+          } else {
+            el.innerHTML = 'No ' + name;
+          }
+        };
+        
+        this.FetchAll = function() {
+          var data = '';
+          if (this.resturants.length > 0) {
+            for (i = 0; i < this.resturants.length; i++) {
+              data += '<tr>';
+              data += '<td onclick="app.Read(' + i + ')">' + this.resturants[i] + '</td>';
+              data += '<td style="padding-left: 1cm">' + this.radii[i] + '</td>';
+              data += '<td style="padding-left: 1cm"><button onclick="app.Delete(' + i + ')">Delete</button></td>';
+              data += '</tr>';
+            }
+          }
+          this.Count(this.resturants.length);
+          return this.el.innerHTML = data;
+        };
+        this.Add = function (object) {
+          el = document.getElementById('bussiness-name');
+          radius = document.getElementById('bussiness-radius');
+          // Get the value
+          var resturant = el.value;
+          if (resturant) {
+            if(this.resturants.find(k => k == resturant)===resturant){
+              for (var i = 0; i < this.resturants.length; i++) {
+                if(this.resturants[i] == resturant)
+                  this.radii[i] = radius.value.trim();
+              }
+              
+              console.log('Updated resturant with name:'+resturant.trim()+' and radius: '+radius.value.trim());
+              object.operationType = 3;
+              $.get("/users", object, function (data) {
+                      //data is the response from server
+                      //it's a list of json
+                      alert("response from server : " + data);
+                  });
+              this.FetchAll();
+              return;
+            }
+            // Add the new value
+            this.resturants.push(resturant.trim());
+            this.radii.push(radius.value.trim());
+            console.log('Created resturant with name:'+resturant.trim()+' and radius: '+radius.value.trim());
+            // Reset input value
+            el.value = '';
+            radius.value = '';
+            // Dislay the new list
+            this.FetchAll();
+            console.log(object);
+            $.get("/users", object, function (data) {
+                      //data is the response from server
+                      //it's a list of json
+                      alert("response from server : " + data);
+            });
+          }
+          
+        };
+        this.Read = function (item) {
+          console.log('Reading resturant with name: ' + this.resturants[item]);
+          var object = new Object();
+          object.name = this.resturants[item];
+          object.operationType = 2;
+              $.get("/users", object, function (data) {
+                      //data is the response from server
+                      //it's a list of json
+                      alert(data);
+                  });
+        }
+        this.Delete = function (item) {
+          // Delete the current row
+          
+          var object = new Object();
+                  console.log('Deleted resturant with name:'+this.resturants[item]);
+                  object.name = this.resturants[item];
+                  //operation 1,2,3,4 are create, read, update and delete respectively
+                  object.operationType = 4;
+          this.resturants.splice(item, 1);
+          
+          // Display the new list
+          $.get("/users", object, function (data) {
+                      //data is the response from server
+                      //it's a list of json
+                      alert("response from server : " + data);
+                  });
+          this.FetchAll();
+        }; 
+      }
+      </script>
     </div>
+</section>
+
+<section id="step-two" class="section step-two">
+  <div class="container">
+    <div class="col-md-8 col-md-offset-2 text-center">
+      <h3>Discover Your Neighborhood!</h3>
+      <p>Find out what category is more popular around your neighborhood</p>
+    </div>
+    <div id="floating-panel-two" style="padding-top: 1cm;float: left;width: 20%">
+      <p>State</p>
+      <input id="state_two" type="text">
+      <p>City</p>
+      <input id="city_two" type="text">     
+      <br>
+      <br>
+      <input id="search" type="button" value="search">
+    </div>
+    <div style="padding-top: 1cm;float: left;width: 20%;text-align: left;padding-left: 2cm">
+      <p>Category</p>
+      <input type="checkbox" name="type" value="Sandwiches"> Sandwiches<br>
+      <input type="checkbox" name="type" value="Pizza"> Pizza<br>
+      <input type="checkbox" name="type" value="Coffee & Tea"> Coffee & Tea<br>
+      <input type="checkbox" name="type" value="Breakfast & Brunch"> Breakfast & Brunch<br>
+      <input type="checkbox" name="type" value="Chinese"> Chinese<br>
+      <input type="checkbox" name="type" value="Specialty Food"> Specialty Food<br>
+      <input type="checkbox" name="type" value="Desserts"> Desserts<br>
+      <input type="checkbox" name="type" value="Japanese"> Japanese<br>
+      <input type="checkbox" name="type" value="Seafood"> Seafood<br>
+      <input type="checkbox" name="type" value="Salad"> Salad<br>
+      <input type="checkbox" name="type" value="Wine & Spirits"> Wine & Spirits<br>
+    </div>
+    <div id="results" style="float: right;padding-left:5cm;width: 60%">
+      <p id="counter" style="padding-top: 1cm">Search Results</p>
+        <table>
+        <tr>
+          <th>Name</th>
+          <th style="padding-left: 2cm">Yelp Stars</th>
+          <th style="padding-left: 2cm">Address</th>
+        </tr>
+          <tbody id="return-results">
+          </tbody>
+      </table>
+    </div>
+    <script type="text/javascript">
+      document.getElementById('search').addEventListener('click', function() {
+        var checked=[];
+        $("input:checkbox[name=type]:checked").each(function(){
+            checked.push($(this).val());
+        });
+        var state_two = document.getElementById('state_two');
+        var city_two = document.getElementById('city_two');
+        
+        //console.log('Searching location with state:'+state_two.value.trim()+', city: '+city_two.value.trim()+'and neighborhood: '+neighborhood_two.value.trim());
+        // Reset input value
+        
+        // Dislay the new list
+        var object = new Object();
+        object.state = state_two.value.trim();
+        object.city = city_two.value.trim();
+        
+        object.category = checked[0];
+        var where = 'where='+JSON.stringify(object);
+        $.get("/api/discover", where, function (data) {
+                  //data is the response from server
+                  //it's a list of json
+                  var results = '';
+                  for (i = 0; i < 10; i++) {
+                  results += '<tr>';
+                  results += '<td>' + data[i].name + '</td>';
+                  results += '<td style="padding-left: 2cm">' + data[i].stars + '</td>';
+                  if(data[i].address !== ''){
+                    results += '<td style="padding-left: 2cm">' + data[i].address + '</td>';
+                  }
+                  else{
+                    results += '<td style="padding-left: 2cm">' + 'N/A' + '</td>';
+                  }
+                  results += '</tr>';
+                  }
+                  document.getElementById('return-results').innerHTML = results;
+        });
+        
+        
+        state_two.value = '';
+        city_two.value = '';
+        
+      });
+    </script>
+  </div>
+</section>
+
+<section id="step-three" class="section step-three">
+  <div class="container">
+    <div class="col-md-8 col-md-offset-2 text-center">
+      <h3>Get Recommendations</h3>
+      <p>Find out what category is more popular around your neighborhood</p>
+    </div>
+    <div id="floating-panel-two" style="padding-top: 1cm;float: left;width: 20%">
+      <p>State</p>
+      <input id="state_three" type="text">
+      <p>City</p>
+      <input id="city_three" type="text">     
+      <br>
+      <br>
+      <input id="search-two" type="button" value="Get Recommendations">
+    </div>
+    <div style="padding-top: 1cm;float: left;width: 20%;text-align: left;padding-left: 2cm">
+      <p>Category</p>
+      <input type="checkbox" name="type" value="Sandwiches"> Sandwiches<br>
+      <input type="checkbox" name="type" value="Pizza"> Pizza<br>
+      <input type="checkbox" name="type" value="Coffee & Tea"> Coffee & Tea<br>
+      <input type="checkbox" name="type" value="Breakfast & Brunch"> Breakfast & Brunch<br>
+      <input type="checkbox" name="type" value="Chinese"> Chinese<br>
+      <input type="checkbox" name="type" value="Specialty Food"> Specialty Food<br>
+      <input type="checkbox" name="type" value="Desserts"> Desserts<br>
+      <input type="checkbox" name="type" value="Japanese"> Japanese<br>
+      <input type="checkbox" name="type" value="Seafood"> Seafood<br>
+      <input type="checkbox" name="type" value="Salad"> Salad<br>
+      <input type="checkbox" name="type" value="Wine & Spirits"> Wine & Spirits<br>
+    </div>
+    <div id="results-three" style="float: right;padding-left:5cm;width: 60%">
+      
+    </div>
+    <script type="text/javascript">
+      document.getElementById('search-two').addEventListener('click', function() {
+        var checked=[];
+        $("input:checkbox[name=type]:checked").each(function(){
+            checked.push($(this).val());
+        });
+        var state_three = document.getElementById('state_three');
+        var city_three = document.getElementById('city_three');
+        
+        //console.log('Searching location with state:'+state_two.value.trim()+', city: '+city_two.value.trim()+'and neighborhood: '+neighborhood_two.value.trim());
+        // Reset input value
+        
+        // Dislay the new list
+        var where = 'where='+JSON.stringify(object);
+        console.log(checked)
+        if(checked.length > 0){
+          var object = new Object();
+          object.state = state_three.value.trim();
+          object.category = checked[0];
+          var where = 'where='+JSON.stringify(object);
+          document.getElementById('results-three').innerHTML = '<p id="counter" style="padding-top: 1cm"></p><table><tr><th>Cities</th><th style="padding-left: 2cm">Average Star</th></tr><tbody id="return-results-three"></tbody></table>';
+          $.get("/api/open", where, function (data) {
+            //data is the response from server
+            //it's a list of json
+            console.log(data);
+            var results = '';
+            for (i = 0; i < Math.min(10,data.length); i++) {
+            results += '<tr>';
+            results += '<td>' + data[i].city + '</td>';
+            results += '<td style="padding-left: 2cm">' + String(data[i].avg_star) + '</td>';
+            results += '</tr>';
+            }
+            document.getElementById('return-results-three').innerHTML = results;
+          });
+          state_three.value = '';
+          city_three.value = '';
+          return;
+        }        
+        var object = new Object();
+        object.state = state_three.value.trim();
+        object.city = city_three.value.trim();
+        var where = 'where='+JSON.stringify(object);
+        document.getElementById('results-three').innerHTML = '<p id="counter" style="padding-top: 1cm"></p><table><tr><th>Categories</th><th style="padding-left: 2cm">Average Star</th></tr><tbody id="return-results-three"></tbody></table>';
+        $.get("/api/open", where, function (data) {
+          //data is the response from server
+          //it's a list of json
+          console.log(data);
+          var results = '';
+          for (i = 0; i < Math.min(10,data.length); i++) {
+          results += '<tr>';
+          results += '<td>' + data[i].category + '</td>';
+          results += '<td style="padding-left: 2cm">' + String(data[i].avg_stars) + '</td>';
+          results += '</tr>';
+          }
+          document.getElementById('return-results-three').innerHTML = results;
+          });
+        state_three.value = '';
+        city_three.value = '';
+        return;       
+      });
+    </script>
+  </div>
+</section>
+
+<section id="step-four" class="step-four section">
+  <div class="container">
+    <div class="col-md-8 col-md-offset-2 text-center">
+      <h3>Open Your Restaurant!</h3>
+      <p>Get tips for a successful bussiness</p>
+    </div>
+    <div id="floating-panel-four" style="padding-top: 1cm;float: left;width: 20%">
+      <p>State</p>
+      <input id="state_three" type="text">
+      <p>City</p>
+      <input id="city_three" type="text">
+      <br>
+      <br>
+      <input id="rating" type="button" value="Get Probability">
+    </div>
+    <div style="padding-top: 1cm;float: left;width: 20%;text-align: left;padding-left: 2cm">
+      <p>Category</p>
+      <input type="checkbox" name="type" value="Sandwiches"> Sandwiches<br>
+      <input type="checkbox" name="type" value="Pizza"> Pizza<br>
+      <input type="checkbox" name="type" value="Coffee & Tea"> Coffee & Tea<br>
+      <input type="checkbox" name="type" value="Breakfast & Brunch"> Breakfast & Brunch<br>
+      <input type="checkbox" name="type" value="Chinese"> Chinese<br>
+      <input type="checkbox" name="type" value="Specialty Food"> Specialty Food<br>
+      <input type="checkbox" name="type" value="Desserts"> Desserts<br>
+      <input type="checkbox" name="type" value="Japanese"> Japanese<br>
+      <input type="checkbox" name="type" value="Seafood"> Seafood<br>
+      <input type="checkbox" name="type" value="Salad"> Salad<br>
+      <input type="checkbox" name="type" value="Wine & Spirits"> Wine & Spirits<br>
+    </div>
+    <div id="success-number" style="float: right;padding-right: 5cm">
+      <p id="counter" style="padding-top: 1cm">Probability of Success</p>
+          <tbody id="success-number">
+          </tbody>
+    </div>
+    <script type="text/javascript">
+      document.getElementById('rating').addEventListener('click', function() {
+        var checked=[];
+        $("input:checkbox[name=type]:checked").each(function(){
+            checked.push($(this).val());
+        });
+        var state_four = document.getElementById('state_two');
+        var city_four = document.getElementById('city_two');
+        //console.log('Searching location with state:'+state_two.value.trim()+', city: '+city_two.value.trim()+'and neighborhood: '+neighborhood_two.value.trim());
+        var object = new Object();
+        object.state = state_four.value.trim();
+        object.city = city_four.value.trim();
+        object.checked = checked;
+        console.log(object);
+        // $.get("/discover", object, function (data) {
+        //           //data is the response from server
+        //           //it's a list of json
+        //           alert("response from server : " + data);
+        // });                     
+        var text = '<p id="counter" style="padding-top: 1cm">Probability of Success</p>';
+        
+        // if (data.length > 0) {
+        //   for (i = 0; i < data.length; i++) {
+        //     results += '<tr>';
+        //     results += '<td ' + data.names[i] + '</td>';
+        //     results += '<td style="padding-left: 1cm">' + data.types[i] + '</td>';
+        //     results += '</tr>';
+        //   }
+        // }
+        text+='<br><br><br><br><br>50%'
+        document.getElementById('success-number').innerHTML = text;
+        state_four.value = '';
+        city_four.value = '';
+      });
+    </script>
   </div>
 </section>
 

@@ -346,28 +346,52 @@ ul li {
 	color: rgba(255, 255, 255, 0.75);
 	font-weight: 400;
 }
-.steps {
+.step-one {
 	background-color: #f78f88;
-	position: relative;
-	text-align: center;
 }
-.steps blockquote {
-	border: 0;
-	margin: 0;
-	padding: 100px 15%;
-}
-.steps h1 {
+.step-one h3 {
 	color: #fff;
-	font: 23px "Merriweather";
-	font-weight: 300;
-}
-.steps h3 {
-	color: #ffffff;
 	margin-top: 0;
 }
-.steps p {
+.step-one p {
 	font-family: "Merriweather", Arial, sans-serif;
 	color: rgba(255, 255, 255, 0.75);
+	font-weight: 400;
+}
+.step-two {
+	background-color: #ffffff;
+}
+.step-two h3 {
+	color: #000000;
+	margin-top: 0;
+}
+.step-two p {
+	font-family: "Merriweather", Arial, sans-serif;
+	color: rgba(0, 0, 0);
+	font-weight: 400;
+}
+.step-three {
+	background-color: #f78f88;
+}
+.step-three h3 {
+	color: #fff;
+	margin-top: 0;
+}
+.step-three p {
+	font-family: "Merriweather", Arial, sans-serif;
+	color: rgba(255, 255, 255, 0.75);
+	font-weight: 400;
+}
+.step-two {
+	background-color: #ffffff;
+}
+.step-two h3 {
+	color: #000000;
+	margin-top: 0;
+}
+.step-two p {
+	font-family: "Merriweather", Arial, sans-serif;
+	color: rgba(0, 0, 0);
 	font-weight: 400;
 }
 /* ------------------------------------------------------------------------------
