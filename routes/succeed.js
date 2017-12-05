@@ -1,10 +1,11 @@
 const express = require('express');
+const spawn = require('child_process').spawn;
 const router = express.Router();
 const mysql = require("mysql");
 const connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : 'cs411CS411!!',
+    password : 'abcde12345',
     database : 'yelp_db'
 });
 connection.connect();
@@ -40,15 +41,42 @@ router.get('/', function(req, res, next) {
     //
     //     }
     // });
-    connection.query("select review.text from business, category, review where business.id = category.business_id and " +
-        "business.id = review.business_id and state = ? and city = ? and category.category = ?", [state, city, category],
-        function (error, results, fields) {
-        if (error) {
-            res.sendStatus(500);
-            throw error;
-        } else {
-            res.status(200).json(results.length);
-        }
+
+    // connection.query("select review.text from business, category, review where business.id = category.business_id and " +
+    //     "business.id = review.business_id and state = ? and city = ? and category.category = ? limit 10", [state, city, category],
+    //     function (error, results, fields) {
+    //     if (error) {
+    //         res.sendStatus(500);
+    //         throw error;
+    //     } else {
+    //         const py = spawn('python3', [process.cwd() + '/routes/test.py']);
+    //         let response = "";
+    //
+    //         py.stdin.write();
+    //
+    //         py.stdout.on('data', (data) => {
+    //             console.log(data);
+    //             response += "hehe";
+    //
+    //         });
+    //         py.stdout.on('end', function(){
+    //             console.log('end');
+    //
+    //         });
+    //         py.on('exit', (code) => {
+    //             console.log(`child process exited with code ${code}`);
+    //             res.status(200).json(response);
+    //         });
+    //
+    //     }
+    // });
+    const py = spawn('python3', [process.cwd() + '/routes/test.py', state, city, category]);
+    let response = "";
+    py.stdout.on('data', (data) => {
+        response += data.toString();
+    });
+    py.stdout.on('end', () => {
+        res.status(200).send(response);
     });
 });
 
