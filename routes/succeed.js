@@ -71,6 +71,7 @@ router.get('/', function(req, res, next) {
     //     }
     // });
     const py = spawn('python3', [process.cwd() + '/resource/rocketeer.py', state, city, category, '100111000111']);
+    console.log(process.cwd());
     let response = "";
     py.stdout.on('data', (data) => {
         response += data.toString();
