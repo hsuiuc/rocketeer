@@ -8,7 +8,7 @@ const connectionPool = mysql.createPool({
     password : 'abcde12345',
     database : 'yelp_db'
 });
-connection.connect();
+//connection.connect();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {

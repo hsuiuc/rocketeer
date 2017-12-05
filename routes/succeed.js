@@ -70,13 +70,15 @@ router.get('/', function(req, res, next) {
     //
     //     }
     // });
-    const py = spawn('python3', [process.cwd() + '/routes/test.py', state, city, category]);
+    const py = spawn('python3', [process.cwd() + '/resource/rocketeer.py', state, city, category, '100111000111']);
     let response = "";
     py.stdout.on('data', (data) => {
         response += data.toString();
+        //response += ":";
     });
     py.stdout.on('end', () => {
-        res.status(200).send(response);
+        console.log(typeof response);
+        res.status(200).json(response);
     });
 });
 
