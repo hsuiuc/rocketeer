@@ -101,7 +101,7 @@ def lda(data):
             print(i)
 
 def main():
-    cnx = mysql.connector.connect(user='root', password='abcde12345',
+    cnx = mysql.connector.connect(user='root', password='cs411CS411!!',
                               host='127.0.0.1',
                               database='yelp_db')
     cursor = cnx.cursor()

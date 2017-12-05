@@ -5,7 +5,7 @@ const crypto = require("crypto");
 const connectionPool = mysql.createPool({
     host     : 'localhost',
     user     : 'root',
-    password : 'abcde12345',
+    password : 'cs411CS411!!',
     database : 'yelp_db'
 });
 //connection.connect();
