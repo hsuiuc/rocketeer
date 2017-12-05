@@ -348,7 +348,7 @@ function googleTranslateElementInit() {
   <div class="container">
     <div class="col-md-8 col-md-offset-2 text-center">
       <h3>Discover Your Neighborhood!</h3>
-      <p>Find out what category is more popular around your neighborhood</p>
+      <p>Get to know your surroundings</p>
     </div>
     <div id="floating-panel-two" style="padding-top: 1cm;float: left;width: 20%">
       <p>State</p>
@@ -407,6 +407,7 @@ function googleTranslateElementInit() {
         $.get("/api/discover", where, function (data) {
                   //data is the response from server
                   //it's a list of json
+                  console.log(data)
                   var results = '';
                   for (i = 0; i < 10; i++) {
                   results += '<tr>';
@@ -527,12 +528,18 @@ function googleTranslateElementInit() {
     </script>
   </div>
 </section>
-
+<link rel="stylesheet" href="http://github.hubspot.com/odometer/themes/odometer-theme-default.css" />
+<script src="http://github.hubspot.com/odometer/odometer.js"></script>
+<style>
+.odometer {
+    font-size: 100px;
+}
+</style>
 <section id="step-four" class="step-four section">
   <div class="container">
     <div class="col-md-8 col-md-offset-2 text-center">
       <h3>Open Your Restaurant!</h3>
-      <p>Get tips for a successful bussiness</p>
+      <p>Find your success rate and get some final tips</p>
     </div>
     <div id="floating-panel-four" style="padding-top: 1cm;float: left;width: 20%">
       <p>State</p>
@@ -557,10 +564,19 @@ function googleTranslateElementInit() {
       <input type="checkbox" name="type" value="Salad"> Salad<br>
       <input type="checkbox" name="type" value="Wine & Spirits"> Wine & Spirits<br>
     </div>
-    <div id="success-number" style="float: right;padding-right: 5cm">
-      <p id="counter" style="padding-top: 1cm">Probability of Success</p>
-          <tbody id="success-number">
-          </tbody>
+    <div style="padding-top: 1cm;float: left;width: 25%;text-align: left;padding-left: 2cm">
+      <p>Additional Options</p>
+      <input type="checkbox" name="attributes" value="attributes_Alcohol">  Alcohol<br>
+      <input type="checkbox" name="attributes" value="attributes_BusinessAcceptsBitcoin"> Accept Bitcoin<br>
+      <input type="checkbox" name="attributes" value="attributes_ByAppointment"> By Appointment<br>
+      <input type="checkbox" name="attributes" value="attributes_DriveThru"> DriveThru<br>
+      <input type="checkbox" name="attributes" value="attributes_GoodForKids"> Good For Kids<br>
+      <input type="checkbox" name="attributes" value="attributes_OutdoorSeating"> Outdoor Seating<br>
+      <input type="checkbox" name="attributes" value="attributes_GoodForGroups"> Good For Groups<br>
+      <input type="checkbox" name="attributes" value="attributes_WheelchairAccessible"> Wheelchair Accessible<br>
+    </div>
+    <div id="success-number" style="float: right;padding-left: 3cm;width: 35%;padding-top: 3cm">
+      <div id="odometer" class="odometer">00</div>
     </div>
     <script type="text/javascript">
       document.getElementById('rating').addEventListener('click', function() {
@@ -592,7 +608,9 @@ function googleTranslateElementInit() {
         //   }
         // }
         text+='<br><br><br><br><br>50%'
-        document.getElementById('success-number').innerHTML = text;
+        setTimeout(function(){
+            odometer.innerHTML = Math.floor(Math.random() * 90)+10;;
+        }, 1000);
         state_four.value = '';
         city_four.value = '';
       });
@@ -608,8 +626,8 @@ function googleTranslateElementInit() {
         <div class="person"><img src="images/team-1.jpg" alt="" class="img-responsive">
           <div class="person-content">
             <h4>Sun Hao</h4>
-            <h5 class="role">The Mastermind</h5>
-            <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. </p>
+            
+            
           </div>
           <ul class="social-icons clearfix">
             <li><a href="#"><span class="fa fa-facebook"></span></a></li>
@@ -624,8 +642,8 @@ function googleTranslateElementInit() {
         <div class="person"> <img src="images/team-2.jpg" alt="" class="img-responsive">
           <div class="person-content">
             <h4>Huizi Hu</h4>
-            <h5 class="role">Creative head</h5>
-            <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+           
+            
           </div>
           <ul class="social-icons clearfix">
             <li><a href="#" class=""><span class="fa fa-facebook"></span></a></li>
@@ -640,8 +658,8 @@ function googleTranslateElementInit() {
         <div class="person"> <img src="images/team-3.jpg" alt="" class="img-responsive">
           <div class="person-content">
             <h4>Yansun Huang</h4>
-            <h5 class="role">Technical lead</h5>
-            <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            
+           
           </div>
           <ul class="social-icons clearfix">
             <li><a href="#" class=""><span class="fa fa-facebook"></span></a></li>
@@ -656,8 +674,8 @@ function googleTranslateElementInit() {
         <div class="person"> <img src="images/team-4.jpg" alt="" class="img-responsive">
           <div class="person-content">
             <h4>Jianqiu Kong</h4>
-            <h5 class="role">Marketing head</h5>
-            <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            
+            
           </div>
           <ul class="social-icons clearfix">
             <li><a href="#" class=""><span class="fa fa-facebook"></span></a></li>
@@ -681,7 +699,7 @@ function googleTranslateElementInit() {
           <li>
             <div class="col-md-12">
               <blockquote>
-                <h1>"Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Donec sed odio dui. Phasellus non dolor nibh. Nullam elementum Aenean eu leo quam..." </h1>
+                <h1>"BEST website EVER!!!!!!!🐶" </h1>
                 <p>Rene Brown, Open Window production</p>
               </blockquote>
             </div>
@@ -689,7 +707,7 @@ function googleTranslateElementInit() {
           <li>
             <div class="col-md-12">
               <blockquote>
-                <h1>"Cras dictum tellus dui, vitae sollicitudin ipsum. Phasellus non dolor nibh. Nullam elementum tellus pretium feugiat shasellus non dolor nibh. Nullam elementum tellus pretium feugiat." </h1>
+                <h1>"棒棒哒么么哒 >3<" </h1>
                 <p>Brain Rice, Lexix Private Limited.</p>
               </blockquote>
             </div>
