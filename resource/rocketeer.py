@@ -1,6 +1,6 @@
 import sys
-import pandas as pd
-import numpy as np
+#import pandas as pd
+#import numpy as np
 #from sklearn.model_selection import ShuffleSplit,cross_val_score
 #from sklearn.ensemble import RandomForestClassifier
 #from nltk.tokenize import RegexpTokenizer
@@ -10,4 +10,4 @@ import numpy as np
 #from gensim import corpora, models
 #import mysql.connector
 
-print("state")
+print(sys.version)
