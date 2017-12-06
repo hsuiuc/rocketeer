@@ -407,6 +407,7 @@ function googleTranslateElementInit() {
         $.get("/api/discover", where, function (data) {
                   //data is the response from server
                   //it's a list of json
+                  document.getElementById('return-results').innerHTML = '';
                   console.log(data)
                   var results = '';
                   for (i = 0; i < 10; i++) {
@@ -575,18 +576,24 @@ function googleTranslateElementInit() {
       <input type="checkbox" name="attributes" value="attributes_GoodForGroups"> Good For Groups<br>
       <input type="checkbox" name="attributes" value="attributes_WheelchairAccessible"> Wheelchair Accessible<br>
     </div>
-    <div id="success-number" style="float: right;padding-left: 3cm;width: 35%;padding-top: 3cm">
+    <div id="success-number" style="float: right;padding-left: 3cm;width: 35%;padding-top: 1.5cm">
+      <p>Probability of Success</p>
       <div id="odometer" class="odometer">00</div>
+      <div id="return-text">
+        <p>Most frequent words in review: </p>
+      </div>
     </div>
     <script type="text/javascript">
       document.getElementById('rating').addEventListener('click', function() {
         var checked=[];
-        var input = ''
+        var input = '';
+        var ones = 0;
         $("input:checkbox[name=type]:checked").each(function(){
             checked.push($(this).val());
         });
         $("input:checkbox[name=attributes]").each(function(){
             input += ($(this).prop('checked')) ? '1':'0';
+            if ($(this).prop('checked')) ones++;
         });
         console.log('checked: '+input);
         var state_four = document.getElementById('state_four');
@@ -597,15 +604,27 @@ function googleTranslateElementInit() {
         object.city = city_four.value.trim();
         object.category = checked[0];
         object.input = input;
-
-        console.log(object);
+        document.getElementById('return-text').innerHTML = '<p>Most frequent words in review: </p>';
+        //console.log(object);
         var where = 'where='+JSON.stringify(object);
+        //console.log(where);
         $.get("/api/succeed", where, function (data) {
                   //data is the response from server
                   //it's a list of json
-                  console.log(data);
+                  console.log(Number(data.split(/\r?\n/)[1]))
+                  console.log(data.split(/\r?\n/)[0])
+                  document.getElementById('return-text').innerHTML+=data.split(/\r?\n/)[0];
+                  setTimeout(function(){
+                    if(Number(input)==0){
+                      odometer.innerHTML = Math.floor(10 * Number(data.split(/\r?\n/)[1])-40)+Math.random() * 10;
+                    }
+                    else{
+                      odometer.innerHTML = Math.floor(10 * Number(data.split(/\r?\n/)[1])-40+ones*10)+Math.random() * 10;
+                    }
+                  }, 10);
+
         });                     
-        var text = '<p id="counter" style="padding-top: 1cm">Probability of Success</p>';
+        
         
         // if (data.length > 0) {
         //   for (i = 0; i < data.length; i++) {
@@ -615,12 +634,6 @@ function googleTranslateElementInit() {
         //     results += '</tr>';
         //   }
         // }
-        text+='<br><br><br><br><br>50%'
-        setTimeout(function(){
-            odometer.innerHTML = Math.floor(Math.random() * 90)+10;;
-        }, 1000);
-        state_four.value = '';
-        city_four.value = '';
       });
     </script>
   </div>
