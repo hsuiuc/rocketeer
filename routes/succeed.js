@@ -72,8 +72,8 @@ router.get('/', function(req, res, next) {
     //
     //     }
     // });
-    //const py = spawn('python', ['/home/shared/rocketeer/resource/rocketeer.py', 'IL', 'Champaign', 'Thai', '110000111001']);
-    const py = spawn('python', [process.cwd() + '/resource/test.py', 'IL', 'Champaign', 'Thai', '110000111001']);
+    const py = spawn('python', ['/home/shared/rocketeer/resource/rocketeer.py', 'IL', 'Champaign', 'Thai', '110000111001']);
+    //const py = spawn('python', [process.cwd() + '/resource/test.py', 'IL', 'Champaign', 'Thai', '110000111001']);
 
 
     console.log(process.cwd());
