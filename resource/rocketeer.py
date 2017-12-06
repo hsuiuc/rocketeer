@@ -104,10 +104,10 @@ def lda(data):
     return ppp
 
 def main():
-    cnx = mysql.connector.connect(user='root', password='cs411CS411!!',
+    #cnx = mysql.connector.connect(user='root', password='cs411CS411!!',
                               host='127.0.0.1',
                               database='yelp_db')
-    cursor = cnx.cursor()
+    #cursor = cnx.cursor()
 
     state = sys.argv[1]
     city = sys.argv[2]
@@ -117,25 +117,25 @@ def main():
     print(city)
     print(category)
     print(input)
-    input=list(input)
-    xtest=pd.DataFrame([input])
-    query = ("select review.text from business, category, review where state = %s and city = %s and business.id ="
-         " category.business_id and category.category = %s and business.id = review.business_id limit 10")
-    cursor.execute(query, (state, city, category))
+    #input=list(input)
+    #xtest=pd.DataFrame([input])
+    #query = ("select review.text from business, category, review where state = %s and city = %s and business.id ="
+    #     " category.business_id and category.category = %s and business.id = review.business_id limit 10")
+    #cursor.execute(query, (state, city, category))
 
-    data = []
-    for review in cursor:
-        data.append(review[0])
+    #data = []
+    #for review in cursor:
+    #    data.append(review[0])
 
-    cursor.close()
-    cnx.close()
+    #cursor.close()
+    #cnx.close()
 
     #recommendation = lda(data)
-    attribute = ['attributes_Alcohol', 'attributes_BusinessAcceptsBitcoin', 'attributes_BusinessAcceptsCreditCards',
-                 'attributes_ByAppointmentOnly', 'attributes_DriveThru', 'attributes_GoodForKids',
-                 'attributes_NoiseLevel', 'attributes_OutdoorSeating', 'attributes_RestaurantsGoodForGroups',
-                 'attributes_RestaurantsPriceRange2', 'attributes_RestaurantsTakeOut',
-                 'attributes_WheelchairAccessible','stars']
+    #attribute = ['attributes_Alcohol', 'attributes_BusinessAcceptsBitcoin', 'attributes_BusinessAcceptsCreditCards',
+    #             'attributes_ByAppointmentOnly', 'attributes_DriveThru', 'attributes_GoodForKids',
+    #             'attributes_NoiseLevel', 'attributes_OutdoorSeating', 'attributes_RestaurantsGoodForGroups',
+    #             'attributes_RestaurantsPriceRange2', 'attributes_RestaurantsTakeOut',
+    #             'attributes_WheelchairAccessible','stars']
     #predicted_score = mainmodel(xtest, attribute,city, category)
     #print(recommendation)
     #print(predicted_score)
