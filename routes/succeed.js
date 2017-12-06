@@ -74,21 +74,7 @@ router.get('/', function(req, res, next) {
     // });
     //const py = spawn('python', ['/home/shared/rocketeer/resource/rocketeer.py', 'IL', 'Champaign', 'Thai', '110000111001']);
     //const py = spawn('python', [process.cwd() + '/resource/test.py', 'IL', 'Champaign', 'Thai', '110000111001']);
-    postData();
 
-    function postData() {
-        $.ajax({
-            type: 'POST',
-            url: process.cwd() + '/resource/test.py',
-            data: {param: 'IL Champaign Chinese 110000111001'},
-            success: callbackFunc
-        });
-    }
-
-
-    function callbackFunc(response) {
-        console.log(response);
-    }
 
     // console.log(process.cwd());
     // let response = "";
