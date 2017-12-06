@@ -25,6 +25,15 @@ router.get('/', function(req, res, next) {
     const radius = req.query.radius;
 
     connectionPool.getConnection(function (error, connection) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query('delimiter // create trigger set_is_open before insert on business for each row begin if new.is_open is null then set new.is_open = 1; end if; end; //');
+        }
+        connection.release();
+    });
+
+    connectionPool.getConnection(function (error, connection) {
         connection.query("select * from business where name = ? limit 5", [name], function (error, results, fields) {
             if (error) {
                 res.sendStatus(500);
@@ -34,11 +43,7 @@ router.get('/', function(req, res, next) {
 
                 let id = crypto.randomBytes(11).toString("hex");
                 //console.log(id);
-                let createSql = "CREATE TRIGGER differentID " +
-                    "AFTER INSERT ON business " +
-                    "REFERENCING NEW ROW as newtuple " +
-                    "FOR EACH ROW " +
-                    "WHEN (newtuple.city IN (SELECT DISTINCT city from business)) INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude, longitude) VALUES ?";
+                let createSql = "INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude, longitude) VALUES ?";
                 let value = [[id, name, neighborhood, address, city, state, postal_code, lat, long]];
 
                 connection.beginTransaction(function (error) {
