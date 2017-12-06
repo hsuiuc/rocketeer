@@ -543,9 +543,9 @@ function googleTranslateElementInit() {
     </div>
     <div id="floating-panel-four" style="padding-top: 1cm;float: left;width: 20%">
       <p>State</p>
-      <input id="state_three" type="text">
+      <input id="state_four" type="text">
       <p>City</p>
-      <input id="city_three" type="text">
+      <input id="city_four" type="text">
       <br>
       <br>
       <input id="rating" type="button" value="Get Probability">
@@ -567,7 +567,7 @@ function googleTranslateElementInit() {
     <div style="padding-top: 1cm;float: left;width: 25%;text-align: left;padding-left: 2cm">
       <p>Additional Options</p>
       <input type="checkbox" name="attributes" value="attributes_Alcohol">  Alcohol<br>
-      <input type="checkbox" name="attributes" value="attributes_BusinessAcceptsBitcoin"> Accept Bitcoin<br>
+      <input type="checkbox" name="attributes" value="attributes_Price"> >$20 Per Person? <br>
       <input type="checkbox" name="attributes" value="attributes_ByAppointment"> By Appointment<br>
       <input type="checkbox" name="attributes" value="attributes_DriveThru"> DriveThru<br>
       <input type="checkbox" name="attributes" value="attributes_GoodForKids"> Good For Kids<br>
@@ -581,22 +581,29 @@ function googleTranslateElementInit() {
     <script type="text/javascript">
       document.getElementById('rating').addEventListener('click', function() {
         var checked=[];
+        var input = ''
         $("input:checkbox[name=type]:checked").each(function(){
             checked.push($(this).val());
         });
-        var state_four = document.getElementById('state_two');
-        var city_four = document.getElementById('city_two');
+        $("input:checkbox[name=attributes]").each(function(){
+            input += ($(this).prop('checked')) ? '1':'0';
+        });
+        console.log('checked: '+input);
+        var state_four = document.getElementById('state_four');
+        var city_four = document.getElementById('city_four');
         //console.log('Searching location with state:'+state_two.value.trim()+', city: '+city_two.value.trim()+'and neighborhood: '+neighborhood_two.value.trim());
         var object = new Object();
         object.state = state_four.value.trim();
         object.city = city_four.value.trim();
-        object.checked = checked;
+        object.category = checked;
+        object.input = input;
+
         console.log(object);
-        // $.get("/discover", object, function (data) {
-        //           //data is the response from server
-        //           //it's a list of json
-        //           alert("response from server : " + data);
-        // });                     
+        $.get("/succeed", object, function (data) {
+                  //data is the response from server
+                  //it's a list of json
+                  alert("response from server : " + data);
+        });                     
         var text = '<p id="counter" style="padding-top: 1cm">Probability of Success</p>';
         
         // if (data.length > 0) {
