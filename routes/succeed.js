@@ -75,7 +75,7 @@ router.get('/', function(req, res, next) {
     //
     //     }
     // });
-    const py = spawn('python3.4', ['/home/shared/rocketeer/resource/rocketeer.py', state, city, category, input]);
+    const py = spawn('python3.4', ['/home/shared/rocketeer/resource/rocketeer.py', 'IL', 'Champaign', 'Chinese', '00100000']);
 
     console.log(process.cwd());
     let response = "";
