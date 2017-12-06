@@ -102,7 +102,15 @@ router.get('/', function(req, res, next) {
         });
         connection.release();
     });
-    
+
+    connectionPool.getConnection(function (error, connection) {
+        if (error) {
+            throw error;
+        } else {
+            connection.query('ALTER TABLE business ADD CHECK (business.latitude < 90)');
+        }
+        connection.release();
+    })
 
 });
 
