@@ -34,7 +34,6 @@ def mainmodel(xtest,attribute,city,category):
 
 def preprocess(business):
     business['attributes_NoiseLevel'] = business['attributes_NoiseLevel'].map({'loud':1, 'average':0, 'quiet':0})
-    business['attributes_RestaurantPriceRange2']=business['attribute_RestaurantPriceRange2'].map{1:0,2:0,3:1,4:1})
     business['stars']=business['stars']*2
     business.fillna(5, inplace=True)
     return business
