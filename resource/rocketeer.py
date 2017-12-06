@@ -96,9 +96,11 @@ def lda(data):
     p=[]
     for i in aa:
         p.append(i.replace('"',''))
+    pp=[]
     for i in p:
         if i!='wa'and i!='thi':
-            print(i)
+            pp.append(i)
+    ppp=" ".join(str(x) for x in pp)
 
 def main():
     cnx = mysql.connector.connect(user='root', password='cs411CS411!!',
