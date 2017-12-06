@@ -19,6 +19,8 @@ router.get('/', function(req, res, next) {
     let state = query.state;
     let city = query.city;
     let category = query.category; //an array of string
+    let input = query.input;
+    console.log(input);
 
     // connection.query("select business.id, avg(stars) as avg_stars , group_concat(concat_ws(':', concat('\"', attribute.name, '\"'), value) separator ',')" +
     //     ' as attribute_value_pairs from business, category, attribute where business.id = category.business_id and business.id = attribute.business_id' +
@@ -70,7 +72,7 @@ router.get('/', function(req, res, next) {
     //
     //     }
     // });
-    const py = spawn('python3', [process.cwd() + '/resource/rocketeer.py', state, city, category, '100111000111']);
+    const py = spawn('python3', [process.cwd() + '/resource/rocketeer.py', state, city, category, input]);
     console.log(process.cwd());
     let response = "";
     py.stdout.on('data', (data) => {
