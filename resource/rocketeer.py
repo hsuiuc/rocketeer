@@ -130,14 +130,14 @@ def main():
     cursor.close()
     cnx.close()
 
-    recommendation = lda(data)
+    #recommendation = lda(data)
     attribute = ['attributes_Alcohol', 'attributes_BusinessAcceptsBitcoin', 'attributes_BusinessAcceptsCreditCards',
                  'attributes_ByAppointmentOnly', 'attributes_DriveThru', 'attributes_GoodForKids',
                  'attributes_NoiseLevel', 'attributes_OutdoorSeating', 'attributes_RestaurantsGoodForGroups',
                  'attributes_RestaurantsPriceRange2', 'attributes_RestaurantsTakeOut',
                  'attributes_WheelchairAccessible','stars']
     predicted_score = mainmodel(xtest, attribute,city, category)
-    print(recommendation)
+    #print(recommendation)
     print(predicted_score)
 
 if __name__=="__main__":

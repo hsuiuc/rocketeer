@@ -77,15 +77,16 @@ router.get('/', function(req, res, next) {
     console.log(process.cwd());
     let response = "";
     console.log(`Spawned child pid: ${py.pid}`);
-    py.on('exit', (code) => {
-        console.log(code);
-    });
+    
     py.stdout.on('data', (data) => {
         response += data.toString();
     });
     py.stdout.on('end', () => {
         console.log(response);
         res.status(200).json(response);
+    });
+    py.on('exit', (code) => {
+        console.log(code);
     });
 });
 
