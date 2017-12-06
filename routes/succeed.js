@@ -20,9 +20,6 @@ router.get('/', function(req, res, next) {
     let city = query.city;
     let category = query.category; //an array of string
     let input = query.input;
-    console.log(state);
-    console.log(city);
-    console.log(category);
     console.log(input);
 
     // connection.query("select business.id, avg(stars) as avg_stars , group_concat(concat_ws(':', concat('\"', attribute.name, '\"'), value) separator ',')" +
