@@ -568,10 +568,10 @@ function googleTranslateElementInit() {
       <p>Additional Options</p>
       <input type="checkbox" name="attributes" value="attributes_Alcohol">  Alcohol<br>
       <input type="checkbox" name="attributes" value="attributes_Price"> >$20 Per Person? <br>
-      <input type="checkbox" name="attributes" value="attributes_ByAppointment"> By Appointment<br>
+      <input type="checkbox" name="attributes" value="attributes_ByAppointment"> By Appointment Only<br>
       <input type="checkbox" name="attributes" value="attributes_DriveThru"> DriveThru<br>
       <input type="checkbox" name="attributes" value="attributes_GoodForKids"> Good For Kids<br>
-      <input type="checkbox" name="attributes" value="attributes_OutdoorSeating"> Outdoor Seating<br>
+      <input type="checkbox" name="attributes" value="attributes_OutdoorSeating"> Outdoor Seating Available<br>
       <input type="checkbox" name="attributes" value="attributes_GoodForGroups"> Good For Groups<br>
       <input type="checkbox" name="attributes" value="attributes_WheelchairAccessible"> Wheelchair Accessible<br>
     </div>
@@ -599,7 +599,7 @@ function googleTranslateElementInit() {
         object.input = input;
 
         console.log(object);
-        $.get("/succeed", object, function (data) {
+        $.get("/api/succeed", object, function (data) {
                   //data is the response from server
                   //it's a list of json
                   alert("response from server : " + data);
