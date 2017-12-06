@@ -72,10 +72,8 @@ router.get('/', function(req, res, next) {
     //
     //     }
     // });
-    const py = spawn('python3.4', ['/home/shared/rocketeer/resource/rocketeer.py', 'IL', 'Champaign', 'Thai', '11000011']);
-    //const py = spawn('python', [process.cwd() + '/resource/test.py', 'IL', 'Champaign', 'Thai', '110000111001']);
-
-
+    const py = spawn('python3.4', ['/home/shared/rocketeer/resource/rocketeer.py', state, city, category, input]);
+    
     console.log(process.cwd());
     let response = "";
     console.log(`Spawned child pid: ${py.pid}`);
