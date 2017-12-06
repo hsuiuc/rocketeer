@@ -136,9 +136,9 @@ def main():
                  'attributes_NoiseLevel', 'attributes_OutdoorSeating', 'attributes_RestaurantsGoodForGroups',
                  'attributes_RestaurantsPriceRange2', 'attributes_RestaurantsTakeOut',
                  'attributes_WheelchairAccessible','stars']
-    predicted_score = mainmodel(xtest, attribute,city, category)
+    #predicted_score = mainmodel(xtest, attribute,city, category)
     #print(recommendation)
-    print(predicted_score)
+    #print(predicted_score)
 
 if __name__=="__main__":
     main()
