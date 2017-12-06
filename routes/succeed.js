@@ -72,7 +72,7 @@ router.get('/', function(req, res, next) {
     //
     //     }
     // });
-    const py = spawn('python', ['/home/shared/rocketeer/resource/rocketeer.py', state, city, category, '111111001100']);
+    const py = spawn('python', ['/home/shared/rocketeer/resource/rocketeer.py', 'IL', 'Champaign', 'Chinese', '111111001100']);
     console.log(process.cwd());
     let response = "";
     console.log(`Spawned child pid: ${py.pid}`);
