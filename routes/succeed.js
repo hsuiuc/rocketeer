@@ -79,6 +79,7 @@ router.get('/', function(req, res, next) {
         response += data.toString();
     });
     py.stdout.on('end', () => {
+        console.log(response);
         res.status(200).json(response);
     });
 });
