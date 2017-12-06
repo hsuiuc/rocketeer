@@ -34,7 +34,11 @@ router.get('/', function(req, res, next) {
 
                 let id = crypto.randomBytes(11).toString("hex");
                 //console.log(id);
-                let createSql = "INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude, longitude) VALUES ?";
+                let createSql = "CREATE TRIGGER differentID" +
+                    "AFTER INSERT ON business" +
+                    "REFERENCING NEW ROW as newtuple" +
+                    "FOR EACH ROW" +
+                    "WHEN (newtuple.city IN (SELECT DISTINCT city from business)) INSERT INTO business (id, name, neighborhood, address, city, state, postal_code, latitude, longitude) VALUES ?";
                 let value = [[id, name, neighborhood, address, city, state, postal_code, lat, long]];
 
                 connection.beginTransaction(function (error) {
