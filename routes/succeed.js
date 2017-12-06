@@ -20,6 +20,9 @@ router.get('/', function(req, res, next) {
     let city = query.city;
     let category = query.category; //an array of string
     let input = query.input;
+    console.log(state);
+    console.log(city);
+    console.log(category);
     console.log(input);
 
     // connection.query("select business.id, avg(stars) as avg_stars , group_concat(concat_ws(':', concat('\"', attribute.name, '\"'), value) separator ',')" +
@@ -72,7 +75,7 @@ router.get('/', function(req, res, next) {
     //
     //     }
     // });
-    const py = spawn('python3.4', ['/home/shared/rocketeer/resource/rocketeer.py', state, city, category, input]);
+    const py = spawn('python3.4', ['/home/shared/rocketeer/resource/rocketeer.py', 'IL', 'Champaign', 'Thai', '110000111001']);
     //const py = spawn('python', [process.cwd() + '/resource/test.py', 'IL', 'Champaign', 'Thai', '110000111001']);
 
 
