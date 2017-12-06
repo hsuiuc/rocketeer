@@ -67,12 +67,12 @@ def lda(data):
     stemmer = PorterStemmer()
     tokenizer = RegexpTokenizer(r'\w+')
     init_stopwords =[stemmer.stem(v) for v in stopwords.words('english')]
-    additional_stopwords = ["'s","...","'ve","``","''","'m",'--',"'ll","'d","wa"]
+    additional_stopwords = ["'s","thi","littl","place","...","'ve","``","''","'m",'--',"'ll","'d","wa"]
     en_stop = additional_stopwords + init_stopwords
     p_stemmer = PorterStemmer()
     doc_set=[]
 
-    for i in range(0,10):
+    for i in range(0,len(data)):
         doc_set.append(data[i])
     texts = []
     for i in doc_set:
@@ -97,7 +97,7 @@ def lda(data):
     for i in aa:
         p.append(i.replace('"',''))
     for i in p:
-        if i!='wa':
+        if i!='wa'and i!='thi':
             print(i)
 
 def main():
