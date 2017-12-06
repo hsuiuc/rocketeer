@@ -6,8 +6,8 @@ import numpy as np
 #from nltk.tokenize import RegexpTokenizer
 #from nltk.corpus import stopwords
 #from nltk.stem.porter import PorterStemmer
-import gensim
-from gensim import corpora, models
+#import gensim
+#from gensim import corpora, models
 import mysql.connector
 
 print("state")
