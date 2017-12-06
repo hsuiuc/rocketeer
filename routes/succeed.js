@@ -73,23 +73,23 @@ router.get('/', function(req, res, next) {
     //     }
     // });
     //const py = spawn('python', ['/home/shared/rocketeer/resource/rocketeer.py', 'IL', 'Champaign', 'Thai', '110000111001']);
-    //const py = spawn('python', [process.cwd() + '/resource/test.py', 'IL', 'Champaign', 'Thai', '110000111001']);
+    const py = spawn('python', [process.cwd() + '/resource/test.py', 'IL', 'Champaign', 'Thai', '110000111001']);
 
 
-    // console.log(process.cwd());
-    // let response = "";
-    // console.log(`Spawned child pid: ${py.pid}`);
-    //
-    // py.stdout.on('data', (data) => {
-    //     response += data.toString();
-    // });
-    // py.stdout.on('end', () => {
-    //     console.log(response);
-    //     res.status(200).json(response);
-    // });
-    // py.on('exit', (code) => {
-    //     console.log(code);
-    // });
+    console.log(process.cwd());
+    let response = "";
+    console.log(`Spawned child pid: ${py.pid}`);
+
+    py.stdout.on('data', (data) => {
+        response += data.toString();
+    });
+    py.stdout.on('end', () => {
+        console.log(response);
+        res.status(200).json(response);
+    });
+    py.on('exit', (code) => {
+        console.log(code);
+    });
 });
 
 module.exports = router;

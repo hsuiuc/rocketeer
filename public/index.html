@@ -599,21 +599,6 @@ function googleTranslateElementInit() {
         object.input = input;
 
         console.log(object);
-          postData();
-
-          function postData() {
-              $.ajax({
-                  type: 'POST',
-                  url: 'test.py',
-                  data: {param: 'IL Champaign Chinese 110000111001'},
-                  success: callbackFunc
-              });
-          }
-
-
-          function callbackFunc(response) {
-              console.log(response);
-          }
         var where = 'where='+JSON.stringify(object);
         $.get("/api/succeed", where, function (data) {
                   //data is the response from server
