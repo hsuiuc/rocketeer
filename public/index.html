@@ -599,7 +599,8 @@ function googleTranslateElementInit() {
         object.input = input;
 
         console.log(object);
-        $.get("/api/succeed", object, function (data) {
+        var where = 'where='+JSON.stringify(object);
+        $.get("/api/succeed", where, function (data) {
                   //data is the response from server
                   //it's a list of json
                   alert("response from server : " + data);
