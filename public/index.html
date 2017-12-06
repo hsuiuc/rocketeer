@@ -566,11 +566,11 @@ function googleTranslateElementInit() {
     </div>
     <div style="padding-top: 1cm;float: left;width: 25%;text-align: left;padding-left: 2cm">
       <p>Additional Options</p>
-      <input type="checkbox" name="attributes" value="attributes_Alcohol">  Alcohol<br>
+      <input type="checkbox" name="attributes" value="attributes_Alcohol">  Accept Credit Card<br>
       <input type="checkbox" name="attributes" value="attributes_Price"> >$20 Per Person? <br>
       <input type="checkbox" name="attributes" value="attributes_ByAppointment"> By Appointment Only<br>
       <input type="checkbox" name="attributes" value="attributes_DriveThru"> DriveThru<br>
-      <input type="checkbox" name="attributes" value="attributes_GoodForKids"> Good For Kids<br>
+      <input type="checkbox" name="attributes" value="attributes_GoodForKids"> High Noise Level<br>
       <input type="checkbox" name="attributes" value="attributes_OutdoorSeating"> Outdoor Seating Available<br>
       <input type="checkbox" name="attributes" value="attributes_GoodForGroups"> Good For Groups<br>
       <input type="checkbox" name="attributes" value="attributes_WheelchairAccessible"> Wheelchair Accessible<br>
@@ -603,7 +603,7 @@ function googleTranslateElementInit() {
         $.get("/api/succeed", where, function (data) {
                   //data is the response from server
                   //it's a list of json
-                  alert("response from server : " + data);
+                  console.log(data);
         });                     
         var text = '<p id="counter" style="padding-top: 1cm">Probability of Success</p>';
         
@@ -633,7 +633,7 @@ function googleTranslateElementInit() {
       <div class="col-md-3 col-sm-6">
         <div class="person"><img src="images/team-1.jpg" alt="" class="img-responsive">
           <div class="person-content">
-            <h4>Sun Hao</h4>
+            <h4>Hao Sun</h4>
             
             
           </div>

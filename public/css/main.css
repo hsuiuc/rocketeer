@@ -347,7 +347,7 @@ ul li {
 	font-weight: 400;
 }
 .step-one {
-	background-color: #f78f88;
+	background-color: #eee2dc;
 }
 .step-one h3 {
 	color: #fff;
@@ -359,7 +359,7 @@ ul li {
 	font-weight: 400;
 }
 .step-two {
-	background-color: #ffffff;
+	background-color: #edc7b7;
 }
 .step-two h3 {
 	color: #000000;
@@ -371,7 +371,7 @@ ul li {
 	font-weight: 400;
 }
 .step-three {
-	background-color: #f78f88;
+	background-color: #ffb48f;
 }
 .step-three h3 {
 	color: #fff;
@@ -382,14 +382,14 @@ ul li {
 	color: rgba(255, 255, 255, 0.75);
 	font-weight: 400;
 }
-.step-two {
-	background-color: #ffffff;
+.step-four {
+	background-color: #ffccbc;
 }
-.step-two h3 {
+.step-four h3 {
 	color: #000000;
 	margin-top: 0;
 }
-.step-two p {
+.step-four p {
 	font-family: "Merriweather", Arial, sans-serif;
 	color: rgba(0, 0, 0);
 	font-weight: 400;
