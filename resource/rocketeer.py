@@ -113,6 +113,10 @@ def main():
     city = sys.argv[2]
     category = sys.argv[3]
     input = sys.argv[4]
+    print(state)
+    print(city)
+    print(category)
+    print(input)
     input=list(input)
     xtest=pd.DataFrame([input])
     query = ("select review.text from business, category, review where state = %s and city = %s and business.id ="
