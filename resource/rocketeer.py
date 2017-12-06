@@ -15,8 +15,8 @@ from gensim import corpora, models
 import gensim
 import mysql.connector
 
-#path="/home/shared/rocketeer/resource/business.csv"
-path="/home/haosun/Documents/CS411/project/rocketeer/resource/business.csv"
+path="/home/shared/rocketeer/resource/business.csv"
+#path="/home/haosun/Documents/CS411/project/rocketeer/resource/business.csv"
 
 def mainmodel(xtest,attribute,city,category):
     data=getdata(attribute,city,category)
@@ -101,6 +101,7 @@ def lda(data):
         if i!='wa'and i!='thi':
             pp.append(i)
     ppp=" ".join(str(x) for x in pp)
+    return ppp
 
 def main():
     cnx = mysql.connector.connect(user='root', password='cs411CS411!!',
@@ -125,13 +126,14 @@ def main():
     cursor.close()
     cnx.close()
 
-    lda(data)
+    recommendation = lda(data)
     attribute = ['attributes_Alcohol', 'attributes_BusinessAcceptsBitcoin', 'attributes_BusinessAcceptsCreditCards',
                  'attributes_ByAppointmentOnly', 'attributes_DriveThru', 'attributes_GoodForKids',
                  'attributes_NoiseLevel', 'attributes_OutdoorSeating', 'attributes_RestaurantsGoodForGroups',
                  'attributes_RestaurantsPriceRange2', 'attributes_RestaurantsTakeOut',
                  'attributes_WheelchairAccessible','stars']
     predicted_score = mainmodel(xtest, attribute,city, category)
+    print(recommendation)
     print(predicted_score)
 
 if __name__=="__main__":

@@ -72,16 +72,13 @@ router.get('/', function(req, res, next) {
     //
     //     }
     // });
-    const py = spawn('python3', [process.cwd() + '/resource/rocketeer.py', state, city, category, input]);
+    const py = spawn('python3', [process.cwd() + '/resource/rocketeer.py', state, city, category, input + '1100']);
     console.log(process.cwd());
     let response = "";
     py.stdout.on('data', (data) => {
-        console.log(data.toString());
         response += data.toString();
-        //response += ":";
     });
     py.stdout.on('end', () => {
-        console.log(response);
         res.status(200).json(response);
     });
 });
