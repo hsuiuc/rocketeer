@@ -127,10 +127,9 @@ cursor.close()
 cnx.close()
 
 recommendation = lda(data)
-attribute = ['attributes_Alcohol', 'attributes_BusinessAcceptsBitcoin', 'attributes_BusinessAcceptsCreditCards',
-             'attributes_ByAppointmentOnly', 'attributes_DriveThru', 'attributes_GoodForKids',
-             'attributes_NoiseLevel', 'attributes_OutdoorSeating', 'attributes_RestaurantsGoodForGroups',
-             'attributes_RestaurantsPriceRange2', 'attributes_RestaurantsTakeOut',
+attribute = ['attributes_BusinessAcceptsCreditCards','attributes_RestaurantsPriceRange2'
+             'attributes_ByAppointmentOnly', 'attributes_DriveThru', 
+             'attributes_NoiseLevel', 'attributes_OutdoorSeating', 'attributes_GoodForKids',
              'attributes_WheelchairAccessible','stars']
 predicted_score = mainmodel(xtest, attribute,city, category)
 print(recommendation)
