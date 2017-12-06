@@ -15,8 +15,8 @@ from gensim import corpora, models
 import gensim
 import mysql.connector
 
-path="/home/shared/rocketeer/resource/business.csv"
-#path="/home/haosun/Documents/CS411/project/rocketeer/resource/business.csv"
+#path="/home/shared/rocketeer/resource/business.csv"
+path="/home/haosun/Documents/CS411/project/rocketeer/resource/business.csv"
 
 def mainmodel(xtest,attribute,city,category):
     data=getdata(attribute,city,category)

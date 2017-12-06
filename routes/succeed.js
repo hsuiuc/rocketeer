@@ -76,11 +76,12 @@ router.get('/', function(req, res, next) {
     console.log(process.cwd());
     let response = "";
     py.stdout.on('data', (data) => {
+        console.log(data.toString());
         response += data.toString();
         //response += ":";
     });
     py.stdout.on('end', () => {
-        console.log(typeof response);
+        console.log(response);
         res.status(200).json(response);
     });
 });
