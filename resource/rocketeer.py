@@ -8,6 +8,6 @@ import numpy as np
 #from nltk.stem.porter import PorterStemmer
 #import gensim
 #from gensim import corpora, models
-import mysql.connector
+#import mysql.connector
 
 print("state")
